@@ -18,10 +18,11 @@ const AppNavigator  = createStackNavigator(
         },
         SignUp3: {
             screen: SignUpScreen3
-        }
+        },
+
     },
     {
-        initialRouteName: 'SignUp1',
+        initialRouteName: 'SignUp3',
         /*  ↓ headerMode가 'none'이니깐 없어도 괜찮지 않을까? (for test)
             defaultNavigationOptions: {
                 title: 'LogIn',
