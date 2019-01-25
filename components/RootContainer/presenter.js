@@ -17,10 +17,17 @@ class RootContainer extends Component {
                 <StatusBar hidden={false} />
                 {isLoggedIn ? (
                     // Home 화면으로 이동
+<<<<<<< HEAD
                     <LoggedInNavigation/>
                 ) : (
                     // Login 화면으로 이동
                     <LoggedOutNavigation/>
+=======
+                    <LoggedOutNavigation/>
+                ) : (
+                    // Login 화면으로 이동
+                    <LoggedInNavigation/>
+>>>>>>> b40d14556c8517fd3bea261e4b2d43ff4765e51f
                 )}
             </View>
         );
