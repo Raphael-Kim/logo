@@ -5,42 +5,14 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { Header } from 'react-navigation';
 
 class SignUpScreen1 extends React.Component{
-    state={
-        loaded: false,
-        email: '',
-        name: '',
-        nickName: '',
-        yes: require('../../assets/images/beforeYes.png'),
-        leftState: true,
-        rightState: true,
-        hidden1: true,
-        hidden2: true,
-        hidden3: true,
-        hidden4: true,
-        data: [],
-    };
-    /* hidden1,2,3,4는 보였다가 안보였다가 관리하는 버튼 */
-
-    componentWillMount(){
-        this._loadAssetsAsync();
-    }
-
-    /* for font */
-    _loadAssetsAsync = async () =>{
-        await Font.loadAsync({
-          NanumSquareR: require('../../assets/fonts/NanumSquareR.ttf'),
-          godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf'),
-        });
-        this.setState({ loaded: true });
-    };
 
     render(){
-        const {email} = this.state.email;
-        const {name} = this.state.name;
-        const {nickName} = this.state.nickName;
+        const {email} = this.props.email;
+        const {name} = this.props.name;
+        const {nickName} = this.props.nickName;
 
         /* for font(start) */
-        if(!this.state.loaded) {
+        if(!this.props.loaded) {
             return <AppLoading />;
         }
         /* for font(end) */
@@ -52,7 +24,7 @@ class SignUpScreen1 extends React.Component{
                         <Image source={require('../../assets/images/logo_font.png')} />
                     </View>
             </ImageBackground>
-        const {nickName} = this.state.nickName;
+        const {nickName} = this.props.nickName;
     */
 
     // V_2 ↓
@@ -76,38 +48,44 @@ class SignUpScreen1 extends React.Component{
                             style={styles.textInput1}
                             placeholder={'E-mail'}
                             returnKeyType={'done'}
+                            keyboardType={'email-address'}
                             maxLength={35}
-                            onChangeText={this.signUpEmail}
+                            onChangeText={this.props.signUpEmail}
                             autoCorrect={false}
                             autoFocus={true}
                             value={email}/>
+                        {this.props.checkEmail === true ? null:
+                        <View style={styles.forNick}>
+                            <Text style={styles.textNick}>이메일 형식에 맞지 않습니다!</Text> 
+                        </View>}
+
                         <TextInput 
                             style={styles.textInput2}
                             placeholder={'이름'}
                             returnKeyType={'done'}
                             maxLength={6}
-                            onChangeText={this.signUpName}
+                            onChangeText={this.props.signUpName}
                             autoFocus={true}
                             autoCorrect={false}
                             value={name}/>
 
-                        {/*닉네임으로 활동하시겠습니까 문구 및 yes,no 버튼 히든 관리, 위에서 이름을 칠 경우 hidden1 이 false가 되어 아래 부분이 보여짐*/}
-                        {this.state.hidden1 === true ? null:
+                        {/*닉네임으로 활동하시겠습니까 문구 및 props.yes,no 버튼 히든 관리, 위에서 이름을 칠 경우 hidden1 이 false가 되어 아래 부분이 보여짐*/}
+                        {this.props.hidden1 === true ? null:
                         <View style={styles.forNick}>
                             <Text style={styles.textNick}>닉네임으로 활동하시겠습니까?</Text>
                             <TouchableOpacity 
-                                onPress={this.yes}>
-                                <Image source={this.state.yes}/>
+                                onPress={this.props.yes}>
+                                <Image source={this.props.yesImg}/>
                             </TouchableOpacity>
 
                             <TouchableOpacity 
-                                onPress={this.no}>
+                                onPress={this.props.no}>
                                 <Image source={require('../../assets/images/noLogin.png')}/>
                             </TouchableOpacity> 
                         </View>}
                         
-                        {/*닉네임 입력칸 버튼 히든 관리, 위에서 yes를 클릭할 경우 hidden2 가 false가 되어 아래 부분이 보여짐*/}
-                        {this.state.hidden2 === true ? null:
+                        {/*닉네임 입력칸 버튼 히든 관리, 위에서 props.yes를 클릭할 경우 hidden2 가 false가 되어 아래 부분이 보여짐*/}
+                        {this.props.hidden2 === true ? null:
                         <View>
                             <View>
                                 <TextInput
@@ -115,7 +93,7 @@ class SignUpScreen1 extends React.Component{
                                     placeholder={'닉네임'}
                                     returnKeyType={'done'}
                                     maxLength={8}
-                                    onChangeText={this.signUpNickName}
+                                    onChangeText={this.props.signUpNickName}
                                     autoCorrect={false}
                                     autoFocus={true}
                                     value={nickName}/>
@@ -123,11 +101,11 @@ class SignUpScreen1 extends React.Component{
                         </View>}
                         
                         {/*닉네임 확인 결과 알림 버튼 히든 관리, 현재는 위에서 로고를 클릭할 경우 hidden3 가 false 그 외의 경우 hidden4 가 false*/}
-                        {this.state.hidden3 === true ? null:
+                        {this.props.hidden3 === true ? null:
                             <View style={styles.forNick}>
                                 <Text style={styles.textNick2}>사용 가능한 닉네임입니다.</Text>
                             </View>}
-                        {this.state.hidden4 === true ? null:
+                        {this.props.hidden4 === true ? null:
                             <View style={styles.forNick}>
                                 <Text style={styles.textNick3}>이미 사용 중인 닉네임입니다.</Text>
                             </View>}
@@ -139,18 +117,18 @@ class SignUpScreen1 extends React.Component{
                 <View style={styles.contents3}>
                     <TouchableOpacity
                         onPress={this._onPressButton} 
-                        disabled={this.state.leftState}>
-                        {this.state.leftState === true ? 
+                        disabled={this.props.leftState}>
+                        {this.props.leftState === true ? 
                         <Image source={require('../../assets/images/leftBlock.png')}/>:
                         <Image source={require('../../assets/images/left.png')}/>}
                     </TouchableOpacity>
 
                     <TouchableOpacity 
                         onPress={() => {this.props.navigation.navigate('SignUp2',
-                            {email: this.state.email, name: this.state.name, nickName: this.state.nickName});
+                            {email: this.props.email, name: this.props.name, nickName: this.props.nickName});
                         }}
-                        disabled={this.state.rightState}>
-                        {this.state.rightState === true ? 
+                        disabled={this.props.rightState}>
+                        {this.props.rightState === true ? 
                         <Image source={require('../../assets/images/rightBlock.png')}/>:
                         <Image source={require('../../assets/images/right.png')}/>}
                     </TouchableOpacity>
@@ -160,78 +138,6 @@ class SignUpScreen1 extends React.Component{
 
     }
 
-    signUpEmail = (text) => {
-        this.setState({
-            email: text
-        }, () =>{
-            if(this.state.email !== '' && this.state.name !== '' && this.state.nickName !== '' && hidden4 === true){
-                this.setState({rightState: false});
-              }else{
-                this.setState({rightState: true});
-            }
-        });
-      }
-    
-    signUpName = (text) => {
-        this.setState({
-            name: text
-        }, () =>{
-            if(this.state.email !== '' && this.state.name !== '' && this.state.nickName !== '' && hidden4 === true){
-                this.setState({rightState: false});
-              }else{
-                this.setState({rightState: true});
-            }
-        });
-        this.setState({
-            hidden1: false
-        });
-    }
-
-    signUpNickName = (text) => {
-        this.setState({
-            nickName: text
-        }, () => {
-            fetch('http://18.222.158.114:3210/searchNick', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                        checkNick: this.state.nickName 
-                })   
-            })
-            .then(response => { return response.json(); })
-            .then(responseData => {
-                                      if(this.state.email !== '' && this.state.name !== '' && this.state.nickName !== ''){
-                                        Object.keys(responseData).length === 0  ? this.setState({hidden3: false, hidden4: true, rightState: false}) : this.setState({hidden3: true, hidden4: false, rightState: true});
-                                      }else{
-                                        this.setState({rightState: true});
-                                      }
-                                  })
-            if(this.state.nickName === ''){ 
-                this.setState({ hidden3: true, hidden4: true});
-            }                      
-        });
-    }
-
-    yes = () => {
-        this._onPressButton;
-        this.setState({
-            rightState: true,
-            hidden2: false,
-            yes: require('../../assets/images/yesLogin.png')
-        });
-    }
-
-    no = () => {
-        this._onPressButton;
-        this.setState({
-            rightState: false,
-            hidden2: true,
-            yes: require('../../assets/images/beforeYes.png')
-        });
-    }
 }
 
 const styles = StyleSheet.create({

@@ -1,47 +1,15 @@
 import React from 'react';
 import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
-import { AppLoading, Font } from 'expo';
+import { AppLoading } from 'expo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Header } from 'react-navigation'
 
 class SignUpScreen2 extends React.Component{
-    state={
-        loaded: false,
-        job: '',
-        schoolName: '',
-        major: '',
-        secondMajor: '',
-        schoolNumber: '',
-        rightState: true,
-        hidden1: true,
-        hidden2: true,
-        hidden3: true,
-        color0: '#E5E5E5',
-        color1: '#E5E5E5',
-        color2: '#E5E5E5',
-        color3: '#E5E5E5',
-        data: [],
-        uniAuto: true,
-        majorAuto: true,
-        majorAuto2: true,
-    };
 
-    componentWillMount(){
-        this._loadAssetsAsync();
-    }
-
-    _loadAssetsAsync = async () =>{
-        await Font.loadAsync({
-          NanumSquareR: require("../../assets/fonts/NanumSquareR.ttf"),
-          godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf'),
-        });
-        this.setState({ loaded: true });
-    };
-    /*for font*/
 
     render(){
         /* for font(start) */
-        if(!this.state.loaded) {
+        if(!this.props.loaded) {
             return <AppLoading />;
         }
         /* for font(end) */
@@ -72,62 +40,63 @@ class SignUpScreen2 extends React.Component{
                             <Text style={styles.job}>직업</Text>
                             <View style = {styles.jobLine}/>
                             <View style={styles.jobs}>
-                                <TouchableOpacity onPress={this.collegian}>
-                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.state.color0}}>대학(원)생</Text>
+                                <TouchableOpacity onPress={this.props.collegian}>
+                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.props.color0}}>대학(원)생</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.etc1}>
-                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.state.color1}}>직장인</Text>
+                                <TouchableOpacity onPress={this.props.etc1}>
+                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.props.color1}}>직장인</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.etc2}>
-                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.state.color2}}>사업가</Text>
+                                <TouchableOpacity onPress={this.props.etc2}>
+                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.props.color2}}>사업가</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.etc3}>
-                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.state.color3}}>기타</Text>
+                                <TouchableOpacity onPress={this.props.etc3}>
+                                    <Text style={{fontFamily: 'NanumSquareR', fontSize: 13, color: this.props.color3}}>기타</Text>
                                 </TouchableOpacity>
                             </View>
 
-                            {this.state.hidden1 === true ? null:
+                            {this.props.hidden1 === true ? null:
                             <View>
                                 <TextInput 
                                     style={styles.textInput}
                                     placeholder={'학교명'}
                                     returnKeyType={'done'}
                                     maxLength={10}
-                                    onChangeText={this.signUpSchool}
+                                    onChangeText={this.props.signUpSchool}
                                     autoCorrect={false}
-                                    value={this.state.schoolName}
+                                    value={this.props.schoolName}
                                     />
-                                {this.state.uniAuto === false ? this.uniAutoComplete() : null}    
+                                {this.props.uniAuto === false ? this.props.uniAutoComplete : null}    
                                 <TextInput 
                                     style={styles.textInput}
                                     placeholder={'전공'}
                                     returnKeyType={'done'}
                                     maxLength={15}
-                                    onChangeText={this.signUpMajor}
+                                    onChangeText={this.props.signUpMajor}
                                     autoCorrect={false}
-                                    value={this.state.major}/>
-                                {this.state.majorAuto === false ? this.majorAutoComplete() : null}
+                                    value={this.props.major}/>
+                                {this.props.majorAuto === false ? this.props.majorAutoComplete : null}
                                 <TextInput 
                                     style={styles.textInput}
                                     placeholder={'이중(부)전공'}
                                     returnKeyType={'done'}
                                     maxLength={15}
-                                    onChangeText={this.signUpSecondMajor}
+                                    onChangeText={this.props.signUpSecondMajor}
                                     autoCorrect={false}
-                                    value={this.state.secondMajor}/>
-                                {this.state.majorAuto2 === false ? this.majorAutoComplete2() : null}
+                                    value={this.props.secondMajor}/>
+                                {this.props.majorAuto2 === false ? this.props.majorAutoComplete2 : null}
                                 <TextInput 
                                     style={styles.textInput}
                                     placeholder={'학번'}
                                     returnKeyType={'done'}
+                                    keyboardType={'numeric'}
                                     maxLength={10}
-                                    onChangeText={this.signUpNumber}
+                                    onChangeText={this.props.signUpNumber}
                                     autoCorrect={false}
-                                    value={this.state.schoolNumber}/>
+                                    value={this.props.schoolNumber}/>
                             </View>}
 
                             {/* 현재는 학번이 201403324 일 경우, 경고문구 뜨도록 설정 */}
-                            {this.state.hidden2 === true ? null:  
+                            {this.props.hidden2 === true ? null:  
                             <View>
                                 <Text style={styles.forSchoolNumber}>이미 등록된 학번입니다.</Text>
                                 <Text style={styles.forSchoolNumber2}>*누군가 나의 학번을 이용하고 있을 경우?</Text>
@@ -135,7 +104,7 @@ class SignUpScreen2 extends React.Component{
                                 <Text style={styles.forSchoolNumber3}>사진을 찍어 heyum2017@gmail.com으로 보내주세요.</Text>        
                             </View>}
 
-                            {this.state.hidden3 === true ? null:  
+                            {this.props.hidden3 === true ? null:  
                             <View>
                                 <Text style={styles.forEtc}>*비대학(원)생(직장인, 사업가, 기타)은 질문 등록만 가능합니다.</Text>       
                             </View>}
@@ -149,7 +118,7 @@ class SignUpScreen2 extends React.Component{
                 {/*전체 3 칸 중 3번째 칸, 화살표 버튼이 들어가는 칸*/}
                 <View style={styles.contents3}>
                     <TouchableOpacity
-                        onPress={this._onPressButton}
+                        onPress={() => {this.props.navigation.navigate('SignUp1');}} 
                         style={styles.left}>
                         <Image source={require('../../assets/images/left.png')}/>
                     </TouchableOpacity>
@@ -159,250 +128,22 @@ class SignUpScreen2 extends React.Component{
                             email: this.props.navigation.state.params.email, 
                             name: this.props.navigation.state.params.name, 
                             nickName: this.props.navigation.state.params.nickName,
-                            job: this.state.job,
-                            schoolName: this.state.schoolName,
-                            major: this.state.major,
-                            secondMajor: this.state.secondMajor,
-                            schoolNumber: this.state.schoolNumber,
+                            job: this.props.job,
+                            schoolName: this.props.schoolName,
+                            major: this.props.major,
+                            secondMajor: this.props.secondMajor,
+                            schoolNumber: this.props.schoolNumber,
                             });
                         }} 
-                        disabled={this.state.rightState} 
+                        disabled={this.props.rightState} 
                         style={styles.right} >
-                        {this.state.rightState === true ? 
+                        {this.props.rightState === true ? 
                         <Image source={require('../../assets/images/rightBlock.png')}/>:
                         <Image source={require('../../assets/images/right.png')}/>}
                     </TouchableOpacity>
                 </View>
             </View>
         );
-    }
-
-    signUpSchool = (text) => {
-        this.setState({
-            schoolName: text,
-            uniAuto: false
-        }, () => {
-            fetch('http://18.222.158.114:3210/searchUni', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                        checkUni: this.state.schoolName 
-                })   
-            })
-            .then(response => { return response.json(); })
-            .then(responseData => { this.setState({ data : responseData})})
-            if(this.state.schoolName !== '' && this.state.major !== ''&& this.state.schoolNumber !== ''){
-                this.setState({rightState: false});
-              }else{
-                this.setState({rightState: true});
-            }
-        });
-    }
-
-    uniAutoComplete(){
-        if(this.state.data.length > 5){
-          newData = new Array;
-          for(let i=0;i<5;i++){
-            newData.push(this.state.data[i]);
-          }
-          return newData.map(newData =>
-            <TouchableOpacity key={newData.schoolCode} onPress={() => {this.setState({schoolName: newData.uniName, uniAuto: true});}}>
-                <Text style={styles.autocomplete}>{newData.uniName}</Text>
-            </TouchableOpacity>
-          )
-        }
-    
-        else{
-          return this.state.data.map(data =>
-            <TouchableOpacity key ={data.schoolCode} onPress={() => {this.setState({schoolName : data.uniName, uniAuto: true});}}>
-                <Text  style={styles.autocomplete}>{data.uniName}</Text>
-            </TouchableOpacity>    
-          )
-        }
-    }
-
-    signUpMajor = (text) => {
-        this.setState({
-            major: text,
-            majorAuto: false
-        }, () => {
-            fetch('http://18.222.158.114:3210/searchMajor', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                        checkUni: this.state.schoolName,
-                        checkMajor: this.state.major 
-                })   
-            })
-            .then(response => { return response.json(); })
-            .then(responseData => { this.setState({ data : responseData})})
-            if(this.state.schoolName !== '' && this.state.major !== ''&& this.state.schoolNumber !== ''){
-                this.setState({rightState: false});
-              }else{
-                this.setState({rightState: true});
-            }
-        });
-    }
-
-    majorAutoComplete(){
-        if(this.state.data.length > 5){
-          newData = new Array;
-          for(let i=0;i<5;i++){
-            newData.push(this.state.data[i]);
-          }
-          return newData.map(newData =>
-            <TouchableOpacity key={newData.majorName} onPress={() => {this.setState({major: newData.majorName, majorAuto: true});}}>
-                <Text style={styles.autocomplete}>{newData.majorName}</Text>
-            </TouchableOpacity>
-          )
-        }
-    
-        else{
-          return this.state.data.map(data =>
-            <TouchableOpacity key ={data.majorName} onPress={() => {this.setState({major : data.majorName, majorAuto: true});}}>
-                <Text  style={styles.autocomplete}>{data.majorName}</Text>
-            </TouchableOpacity>    
-          )
-        }
-    }
-
-    signUpSecondMajor = (text) => {
-        this.setState({
-            secondMajor: text,
-            majorAuto2: false
-        }, () => {
-            fetch('http://18.222.158.114:3210/searchMajor', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                        checkUni: this.state.schoolName,
-                        checkMajor: this.state.secondMajor 
-                })   
-            })
-            .then(response => { return response.json(); })
-            .then(responseData => { this.setState({ data : responseData})})
-            if(this.state.schoolName !== '' && this.state.major !== ''&& this.state.schoolNumber !== ''){
-                this.setState({rightState: false});
-              }else{
-                this.setState({rightState: true});
-            }
-        });
-    }
-
-    majorAutoComplete2(){
-        if(this.state.data.length > 5){
-          newData = new Array;
-          for(let i=0;i<5;i++){
-            newData.push(this.state.data[i]);
-          }
-          return newData.map(newData =>
-            <TouchableOpacity key={newData.majorName} onPress={() => {this.setState({secondMajor: newData.majorName, majorAuto2: true});}}>
-                <Text style={styles.autocomplete}>{newData.majorName}</Text>
-            </TouchableOpacity>
-          )
-        }
-    
-        else{
-          return this.state.data.map(data =>
-            <TouchableOpacity key ={data.majorName} onPress={() => {this.setState({secondMajor: data.majorName, majorAuto2: true});}}>
-                <Text  style={styles.autocomplete}>{data.majorName}</Text>
-            </TouchableOpacity>    
-          )
-        }
-    }
-
-    signUpNumber = (text) => {
-        this.setState({
-            schoolNumber: text,
-        },() => {
-            fetch('http://18.222.158.114:3210/searchNumber', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                        checkNumber: this.state.schoolNumber 
-                })   
-            })
-            .then(response => { return response.json(); })
-            .then(responseData => {
-                                      if(this.state.schoolName !== '' && this.state.major !== ''&& this.state.schoolNumber !== ''){
-                                        Object.keys(responseData).length === 0  ? this.setState({hidden2:true, rightState: false}) : this.setState({hidden2: false, rightState: true});
-                                      }else{
-                                        this.setState({rightState: true});
-                                      }
-                                  })
-            if(this.state.schoolNumber === ''){ 
-                this.setState({ hidden2: true});
-            }                      
-        });
-    }
-    
-    collegian = () => {
-        this.setState({
-            hidden1: false,
-            hidden3: true,
-            rightState: true,
-            job: 'collegian',
-            color0: '#292F6E',
-            color1: '#E5E5E5',
-            color2: '#E5E5E5',
-            color3: '#E5E5E5'
-        });
-    }
-
-    etc1 = () => {
-        this.setState({
-            hidden1: true,
-            hidden2: true,
-            hidden3: false,
-            rightState: false,
-            job: 'employee',
-            color0: '#E5E5E5',
-            color1: '#292F6E',
-            color2: '#E5E5E5',
-            color3: '#E5E5E5'
-        });
-    }
-
-    
-    etc2 = () => {
-        this.setState({
-            hidden1: true,
-            hidden2: true,
-            hidden3: false,
-            rightState: false,
-            job: 'business',
-            color0: '#E5E5E5',
-            color1: '#E5E5E5',
-            color2: '#292F6E',
-            color3: '#E5E5E5'
-        });
-    }
-
-    
-    etc3 = () => {
-        this.setState({
-            hidden1: true,
-            hidden2: true,
-            hidden3: false,
-            rightState: false,
-            job: 'etc',
-            color0: '#E5E5E5',
-            color1: '#E5E5E5',
-            color2: '#E5E5E5',
-            color3: '#292F6E'
-        });
     }
 }
 

@@ -127,7 +127,7 @@ class SignUpScreen3 extends React.Component{
                 {/*전체 3 칸 중 3번째 칸, 화살표 버튼이 들어가는 칸*/}
                 <View style={styles.contents3}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 40, /*backgroundColor: 'black'(for test)*/}}>
-                        <TouchableOpacity onPress={this._onPressButton}>
+                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignUp2');}} >
                             <Image source={require('../../assets/images/left.png')}/>
                         </TouchableOpacity>
                     </View>
