@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ProfileScreen from "./presenter";
-import { AppLoading, Font } from "expo";
+import { AppLoading, Font } from 'expo';
 
 class Container extends Component {
     state = {
         isFetching: false,
         loaded: false, // for font
-        profileImg: require(''),
+        profileImg: require('../../assets/images/suzi(x4).png'),
         nickName: '리덕스에서 내 닉네임을 받아와야 함',
-        famousSaying: 'Better the last smile than the first laughter',
-
+        famousSaying: 'Better the last smile than the first laughter'
     };
 
     componentWillReceiveProps = (nextProps) => {
@@ -44,7 +43,7 @@ class Container extends Component {
     _loadAssetsAsync = async () =>{
         await Font.loadAsync({
             NanumSquareR: require("../../assets/fonts/NanumSquareR.ttf"),
-            godoRoundedR: require("../../assets/fonts/godoRoundedR.ttf")
+            godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf')
         });
         this.setState({ loaded: true });
     };

@@ -32,7 +32,7 @@ class ProfileScreen extends React.Component{
             {/*전체 # 칸 중 2번째 칸, 프로필 이미지, 닉네임, 명언 들어가는 칸*/}
             <View style={styles.contents2}>
                 <View style={styles.profileImgContainer}>
-                    <Image source={require('')} style={styles.profileImg}></Image>
+                <Image source={this.props.profileImg} style={styles.profileImg}></Image>
                 </View>
                 <Text>{this.props.nickName}</Text>
                 <View style={styles.Line}></View>
@@ -83,37 +83,28 @@ const styles = StyleSheet.create({
     contents2: {
         height: hp('45%'), 
         width: wp('100%'),
-        justifyContent: 'center',
         alignItems: 'center'
     },
     profileImgContainer: {
         marginTop: hp('5%'),
-        height: hp('20%'),
-        width: wp('20%'),
-        borderRadius: 40,
+        height: hp('10%'),
+        width: wp('10%'),
+        //borderRadius: 40,
         overflow: 'hidden'
     },
     profileImg: {
         flex: 1,
-        borderRadius: 40,
-    },
-    profileName: {
-        fontFamily: '',
-        color: 'white',
-        textAlign: 'center',
-        fontSize: wp('13%')
+        //borderRadius: 40,
     },
     Line:{
         borderBottomWidth: 1,
-        borderBottomColor:'white',
-        marginHorizontal: wp('24%'),
+        borderBottomColor: 'white',
+        marginHorizontal: 125,
     },
     contents3: {
         height: hp('40%'), 
         width: wp('100%'),
     },
-
-
 });
 
 export default ProfileScreen;
