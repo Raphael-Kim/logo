@@ -17,7 +17,7 @@ const db = mysql.createConnection({
 
 db.connect();
 
-app.listen(3210, ()=>{
+app.listen(1219, ()=>{
     console.log('Always my eyes on here');
 });
 
@@ -95,6 +95,33 @@ app.post('/searchNumber', function(req, res){
     };
     var sql = `SELECT schoolNumber FROM userinfo WHERE schoolNumber = '${data.schoolNumber}'`;
     db.query(sql, data, (err, result)=>{
+        if(err){
+            throw err;
+        }else{
+            console.log(result);
+            res.send(result);
+        } 
+    });
+});
+
+app.post('/changeProfileImg', function(req, res){
+    var data = {
+        img: req.body.img
+    };
+    console.log(data.img);
+    var sql = `UPDATE userinfo SET img = '${data.img}' WHERE name = '최기환'`;
+    db.query(sql, data, (err, result)=>{
+        if(err){
+            throw err;
+        }else{
+            console.log(result);
+        } 
+    });
+});
+
+app.post('/test', function(req, res){
+    var sql = `SELECT img FROM userinfo WHERE name = '최기환'`;
+    db.query(sql,(err, result)=>{
         if(err){
             throw err;
         }else{

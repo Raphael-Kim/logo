@@ -1,9 +1,12 @@
 import React from 'react';
 import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, RefreshControl, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { BackgroundFetch } from 'expo';
 
 class ProfileScreen extends React.Component{
-
+    state = {
+        test : null
+    };
     render(){
 
         return(
@@ -31,23 +34,55 @@ class ProfileScreen extends React.Component{
 
             {/*전체 # 칸 중 2번째 칸, 프로필 이미지, 닉네임, 명언 들어가는 칸*/}
             <View style={styles.contents2}>
-                <View style={styles.profileImgContainer}>
-                <Image source={this.props.profileImg} style={styles.profileImg}></Image>
+                {this.props.beforePick === true ?
+                <TouchableOpacity
+                    style={styles.beforePick}
+                    onPress={this.props.pickImage}> 
+                </TouchableOpacity>
+                :<TouchableOpacity
+                    style={styles.profileImgContainer}
+                    onPress={this.props.pickImage}>
+                    {this.props.profileImg &&
+                        <Image source={{uri: this.props.profileImg}} style={styles.profileImg}/>}    
+                </TouchableOpacity>}
+                <View style={{flex: 1}}>
+                    <Text style={styles.nickName}>{this.props.nickName}</Text>
                 </View>
-                <Text>{this.props.nickName}</Text>
-                <View style={styles.Line}></View>
-                <Text>{this.props.famousSaying}</Text>
+                <View style={styles.Line}/>
+                <View style={{flex: 1}}>
+                    <Text style={styles.famousSaying}>{this.props.famousSaying}</Text>
+                </View>
             </View>
 
             {/*전체 # 칸 중 3번째 칸, 랭킹이 들어가는 칸*/}
             <View style={styles.contents3}>
-                
+                <TouchableOpacity
+                    style={styles.beforePick}
+                    onPress={this.test}> 
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.profileImgContainer}
+                    onPress={this.test}> 
+                    {`data:image/png;base64,${this.state.test}` &&
+                        <Image source={{uri: `data:image/png;base64,${this.state.test}`}} style={{width: 100, height: 100}}/>}
+                </TouchableOpacity>
             </View>
         </ImageBackground>
         </View>
         );
     }
-    
+        test = ()=> {
+            fetch('http://18.222.158.114:1219/test', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then((responseData)=>{
+                this.setState({ test: responseData.img})
+            })
+        }
 }
 
 const styles = StyleSheet.create({
@@ -86,20 +121,42 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     profileImgContainer: {
-        marginTop: hp('5%'),
-        height: hp('10%'),
-        width: wp('10%'),
-        //borderRadius: 40,
-        overflow: 'hidden'
+        height: 100,
+        width: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    beforePick: {
+        height: 100,
+        width: 100,
+        borderRadius: 60,
+        backgroundColor: 'blue'  
     },
     profileImg: {
-        flex: 1,
-        //borderRadius: 40,
+        height: 100,
+        width: 100,
+        borderRadius: 50
     },
+    /* height, width 상대값으로 수정 필요, height와 width의 절대값이 같아야 정사각형으로 사진이 뜨고 borderRadius 는 height 나 width의 1/2 값으로 설정하면 동그라미로 됨  */
     Line:{
         borderBottomWidth: 1,
         borderBottomColor: 'white',
         marginHorizontal: 125,
+    },
+    nickName:{
+        fontFamily: 'godoRoundedR',
+        color: 'white',
+        textAlign: 'center',
+        fontSize: wp('6%'),
+    },
+    famousSaying:{
+        fontFamily: 'godoRoundedR',
+        color: 'white',
+        textAlign: 'center',
+        fontSize: wp('5%'),
+    },
+    forText:{
+        flex: 1
     },
     contents3: {
         height: hp('40%'), 
