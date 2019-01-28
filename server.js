@@ -17,7 +17,7 @@ const db = mysql.createConnection({
 
 db.connect();
 
-app.listen(1219, ()=>{
+app.listen(3210, ()=>{
     console.log('Always my eyes on here');
 });
 
@@ -119,14 +119,3 @@ app.post('/changeProfileImg', function(req, res){
     });
 });
 
-app.post('/test', function(req, res){
-    var sql = `SELECT img FROM userinfo WHERE name = '최기환'`;
-    db.query(sql,(err, result)=>{
-        if(err){
-            throw err;
-        }else{
-            console.log(result);
-            res.send(result);
-        } 
-    });
-});

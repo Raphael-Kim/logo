@@ -45,44 +45,83 @@ class ProfileScreen extends React.Component{
                     {this.props.profileImg &&
                         <Image source={{uri: this.props.profileImg}} style={styles.profileImg}/>}    
                 </TouchableOpacity>}
-                <View style={{flex: 1}}>
+                <View style={{height: hp('8%'), width: wp('100%'), marginTop: 5, justifyContent: 'center'}}>
                     <Text style={styles.nickName}>{this.props.nickName}</Text>
                 </View>
-                <View style={styles.Line}/>
-                <View style={{flex: 1}}>
+                <View style={{borderBottomColor: 'white', borderBottomWidth: 1}}></View>
+                <View style={{height: hp('10%'), width: wp('80%'), marginTop: 5, alignItems: 'center' }}>
                     <Text style={styles.famousSaying}>{this.props.famousSaying}</Text>
                 </View>
             </View>
 
             {/*전체 # 칸 중 3번째 칸, 랭킹이 들어가는 칸*/}
             <View style={styles.contents3}>
-                <TouchableOpacity
-                    style={styles.beforePick}
-                    onPress={this.test}> 
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.profileImgContainer}
-                    onPress={this.test}> 
-                    {`data:image/png;base64,${this.state.test}` &&
-                        <Image source={{uri: `data:image/png;base64,${this.state.test}`}} style={{width: 100, height: 100}}/>}
-                </TouchableOpacity>
+                        <View style={styles.buttonList}>
+                                <TouchableOpacity onPress={this.props.clickSchool}>
+                                    <Image source={this.props.schoolImg} style={{height: hp('13%'), width: wp('15%')}} resizeMode='contain'/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.props.clickLevel}>
+                                    <Image source={this.props.levelImg} style={{height: hp('13%'), width: wp('15%')}} resizeMode='contain'/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.props.clickRanking}>
+                                    <Image source={this.props.rankingImg} style={{height: hp('13%'), width: wp('15%')}} resizeMode='contain'/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.props.clickScore}>
+                                    <Image source={this.props.scoreImg} style={{height: hp('13%'), width: wp('15%')}} resizeMode='contain'/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.props.clickAnswer}>
+                                    <Image source={this.props.answerImg} style={{height: hp('13%'), width: wp('15%')}} resizeMode='contain'/>
+                                </TouchableOpacity>
+                        </View>
+                        <View style={styles.contents4}>
+                            {this.props.school === true ? null:
+                            <View style={{alignItems: 'center', marginTop: 15}}>
+                                <Text style={styles.contentsStyle}>학교</Text>
+                                <View style={styles.line2}/>
+                                <Text>{this.props.MyUni}, {this.props.Major}, {this.props.SecondMajor}</Text>
+                            </View>
+                            }                            
+                            {this.props.level === true ? null:
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.contentsStyle}>레벨</Text>
+                                <View style={styles.line2}/>
+                                <Text>{this.props.myLevel}</Text>
+                            </View>
+                            }
+                            {this.props.ranking === true ? null:
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.contentsStyle}>랭킹</Text>
+                                <View style={styles.line2}/>
+                                    <View style={styles.contentsStyle2}>
+                                        <View><Text>{this.props.myUni}</Text></View>
+                                        <View><Text>대학 내 랭킹 from DB</Text></View>
+                                    </View>
+                                    <View style={styles.contentsStyle2}>
+                                        <View><Text>{this.props.myMajor}</Text></View>
+                                        <View><Text>과 내 랭킹 from DB</Text></View>
+                                    </View>
+                            </View>
+                            }
+                            {this.props.score === true ? null:
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.contentsStyle}>총점</Text>
+                                <View style={styles.line2}/>
+                                <Text>{this.props.myScore}</Text>
+                            </View>
+                            }
+                            {this.props.answer === true ? null:
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.contentsStyle}>답한 질문</Text>
+                                <View style={styles.line2}/>
+                                <Text>내가 총 답한 질문 개수 from DB</Text>
+                            </View>
+                            }
+                        </View>
             </View>
         </ImageBackground>
         </View>
         );
     }
-        test = ()=> {
-            fetch('http://18.222.158.114:1219/test', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then((responseData)=>{
-                this.setState({ test: responseData.img})
-            })
-        }
 }
 
 const styles = StyleSheet.create({
@@ -116,7 +155,7 @@ const styles = StyleSheet.create({
         fontSize: wp('12%'),
     },
     contents2: {
-        height: hp('45%'), 
+        height: hp('40%'), 
         width: wp('100%'),
         alignItems: 'center'
     },
@@ -130,7 +169,7 @@ const styles = StyleSheet.create({
         height: 100,
         width: 100,
         borderRadius: 60,
-        backgroundColor: 'blue'  
+        backgroundColor: 'white'  
     },
     profileImg: {
         height: 100,
@@ -138,16 +177,11 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     /* height, width 상대값으로 수정 필요, height와 width의 절대값이 같아야 정사각형으로 사진이 뜨고 borderRadius 는 height 나 width의 1/2 값으로 설정하면 동그라미로 됨  */
-    Line:{
-        borderBottomWidth: 1,
-        borderBottomColor: 'white',
-        marginHorizontal: 125,
-    },
     nickName:{
         fontFamily: 'godoRoundedR',
         color: 'white',
         textAlign: 'center',
-        fontSize: wp('6%'),
+        fontSize: wp('8%'),
     },
     famousSaying:{
         fontFamily: 'godoRoundedR',
@@ -155,12 +189,38 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: wp('5%'),
     },
-    forText:{
-        flex: 1
-    },
     contents3: {
-        height: hp('40%'), 
+        height: hp('45%'), 
         width: wp('100%'),
+        alignItems: 'center',
+    },
+    buttonList: {
+        height: hp('10%'),
+        width: wp('90%'),
+        flexDirection : 'row',
+        justifyContent: 'space-between',
+        
+    },
+    contents4:{
+        height: hp('35'),
+        width: wp('100%'),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    contentsStyle:{
+        fontFamily: 'godoRoundedR',
+        color: '#D7A8F8',
+        textAlign: 'center',
+        fontSize: wp('5%'),
+    },
+    line2:{
+        borderBottomWidth: 1,
+        borderBottomColor: '#D7A8F8',
+        marginHorizontal: 200,
+    },
+    contentsStyle2:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 });
 

@@ -2,17 +2,31 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ProfileScreen from "./presenter";
 import { AppLoading, Font } from 'expo';
-import { ImagePicker, Permissions } from 'expo';
-import { CameraRoll } from 'react-native';
+import { ImagePicker, Permissions } from 'expo'
 
 class Container extends Component {
     state = {
         isFetching: false,
         loaded: false, // for font
         profileImg: null,
-        nickName: '리덕스에서 내 닉네임을 받아와야 함',
+        nickName: 'From Redux',
         famousSaying: 'Better the last smile than the first laughter',
         beforePick: true,
+        schoolImg: require('../../assets/images/school2.png'),
+        levelImg: require('../../assets/images/level2.png'),
+        rankingImg: require('../../assets/images/ranking2.png'),
+        scoreImg: require('../../assets/images/score2.png'),
+        answerImg: require('../../assets/images/answer2.png'),
+        school: true,
+        level: true,
+        ranking: true,
+        score: true,
+        answer: true,
+        myUni: 'From Redux',
+        myMajor: 'FR',
+        mySecondMajor: 'FR',
+        myLevel: 'FR',
+        myScore: 'FR',
     };
 
     componentWillReceiveProps = (nextProps) => {
@@ -51,12 +65,92 @@ class Container extends Component {
             {...this.props} 
             {...this.state}
             pickImage={this._pickImage}
+            clickSchool={this._school}
+            clickLevel={this._level}
+            clickRanking={this._ranking}
+            clickScore={this._score}
+            clickAnswer={this._answer}
             />
         );
     }
 
+    _school = () => {
+        this.setState({ 
+            schoolImg: require('../../assets/images/school.png'),
+            levelImg: require('../../assets/images/level2.png'),
+            rankingImg: require('../../assets/images/ranking2.png'),
+            scoreImg: require('../../assets/images/score2.png'),
+            answerImg: require('../../assets/images/answer2.png'),
+            school: false,
+            level: true,
+            ranking: true,
+            score: true,
+            answer: true,
+         });
+    };
+
+    _level = () => {
+        this.setState({ 
+            schoolImg: require('../../assets/images/school2.png'),
+            levelImg: require('../../assets/images/level.png'),
+            rankingImg: require('../../assets/images/ranking2.png'),
+            scoreImg: require('../../assets/images/score2.png'),
+            answerImg: require('../../assets/images/answer2.png'),
+            school: true,
+            level: false,
+            ranking: true,
+            score: true,
+            answer: true,
+         });
+    };
+
+    _ranking = () => {
+        this.setState({ 
+            schoolImg: require('../../assets/images/school2.png'),
+            levelImg: require('../../assets/images/level2.png'),
+            rankingImg: require('../../assets/images/ranking.png'),
+            scoreImg: require('../../assets/images/score2.png'),
+            answerImg: require('../../assets/images/answer2.png'),
+            school: true,
+            level: true,
+            ranking: false,
+            score: true,
+            answer: true,
+         });
+    };
+
+    _score = () => {
+        this.setState({ 
+            schoolImg: require('../../assets/images/school2.png'),
+            levelImg: require('../../assets/images/level2.png'),
+            rankingImg: require('../../assets/images/ranking2.png'),
+            scoreImg: require('../../assets/images/score.png'),
+            answerImg: require('../../assets/images/answer2.png'),
+            school: false,
+            level: true,
+            ranking: true,
+            score: false,
+            answer: true,
+         });
+    };
+
+    _answer = () => {
+        this.setState({ 
+            schoolImg: require('../../assets/images/school2.png'),
+            levelImg: require('../../assets/images/level2.png'),
+            rankingImg: require('../../assets/images/ranking2.png'),
+            scoreImg: require('../../assets/images/score2.png'),
+            answerImg: require('../../assets/images/answer.png'),
+            school: true,
+            level: true,
+            ranking: true,
+            score: true,
+            answer: false,
+         });
+    };
+
     /*for font(start)*/
-    _loadAssetsAsync = async () =>{
+    _loadAssetsAsync = async () => {
         await Font.loadAsync({
             NanumSquareR: require("../../assets/fonts/NanumSquareR.ttf"),
             godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf')
@@ -69,13 +163,13 @@ class Container extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [1, 4],
-          base64: true,
+          base64: true
         });
         // this gives you a rct-image-store URI or a base64 image tag that
         // you can use from ImageStore
         if (!result.cancelled) {
             this.setState({ profileImg: result.uri, beforePick: false });
-            fetch('http://18.222.158.114:1219/changeProfileImg', {
+            fetch('http://18.222.158.114:3210/changeProfileImg', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
