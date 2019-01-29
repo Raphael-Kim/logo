@@ -103,3 +103,19 @@ app.post('/searchNumber', function(req, res){
         } 
     });
 });
+
+app.post('/changeProfileImg', function(req, res){
+    var data = {
+        img: req.body.img
+    };
+    console.log(data.img);
+    var sql = `UPDATE userinfo SET img = '${data.img}' WHERE name = '최기환'`;
+    db.query(sql, data, (err, result)=>{
+        if(err){
+            throw err;
+        }else{
+            console.log(result);
+        } 
+    });
+});
+

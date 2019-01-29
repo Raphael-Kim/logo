@@ -3,6 +3,7 @@ import LogInScreen from '../screens/LogInScreen';
 import SignUpScreen1 from '../screens/SignUpScreen1';
 import SignUpScreen2 from '../screens/SignUpScreen2';
 import SignUpScreen3 from '../screens/SignUpScreen3';
+import ProfileScreen from '../screens/ProfileScreen';
 
 // API: createStackNavigator(RouteConfigs, StackNavigatorConfig);
 const AppNavigator  = createStackNavigator(
@@ -18,10 +19,13 @@ const AppNavigator  = createStackNavigator(
         },
         SignUp3: {
             screen: SignUpScreen3
+        },
+        Profile: {
+            screen: ProfileScreen
         }
     },
     {
-        initialRouteName: 'SignUp1',
+        initialRouteName: 'Profile',
         /*  ↓ headerMode가 'none'이니깐 없어도 괜찮지 않을까? (for test)
             defaultNavigationOptions: {
                 title: 'LogIn',
