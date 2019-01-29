@@ -6,7 +6,7 @@ import { ImagePicker, Permissions } from 'expo'
 
 class Container extends Component {
     state = {
-        isFetching: false,
+        isFetching: false, //for photo
         loaded: false, // for font
         profileImg: null,
         nickName: 'From Redux',
