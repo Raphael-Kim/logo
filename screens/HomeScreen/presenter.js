@@ -1,11 +1,13 @@
 import React from 'react';
-import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, RefreshControl, ScrollView } from 'react-native';
+import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { AnimatedCircularProgress } from '../../circular-progress(RN)';
+import Card from '../../components/Card(feed)'
 
-class HomeScreen extends React.Component{
+class HomeScreen extends React.Component {
 
     render(){
-
+        console.log("presenter render");
         return(
         <View style={styles.container}>
 
@@ -22,17 +24,32 @@ class HomeScreen extends React.Component{
                     <Text style={styles.logo}>logo</Text>
                 </View>
                 <View style={{flex: 1, marginRight: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', alignItems: 'flex-end', marginTop: 5}}>
-                    <Image 
-                        source={require('../../assets/images/suzi(x4).png')}
-                        style={{width: wp('10%') , height: wp('10%')}} 
-                    />
+                    <TouchableOpacity 
+                        onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);} }>
+                        <AnimatedCircularProgress
+                            ref={(ref) => this.circularProgress = ref}
+                            size={wp('11%')}
+                            width={wp('0.8%')}
+                            fill={70}
+                            lineCap={'round'}
+                            // tintColor: stroke 색깔
+                            onAnimationComplete={() => console.log('onAnimationComplete')}
+                            backgroundColor="red">
+                            {
+                                () => (<Image 
+                                            source={require('../../assets/images/suzi(x4).png')}
+                                            style={{width: '100%' , height: '100%'}} 
+                                        />)
+                            }
+                        </AnimatedCircularProgress>
+                    </TouchableOpacity>
                 </View>
             </ImageBackground>
 
             {/*전체 # 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
             <View style={styles.contents2}>
                 <TouchableOpacity 
-                    onPress={this._onPress }>
+                    onPress={() => {this.circularProgress.reAnimate(0, 100, 800, Easing.quad);} }>
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
                         style={{width: wp('80%') , height: hp('15%')}}
@@ -41,44 +58,17 @@ class HomeScreen extends React.Component{
                 </TouchableOpacity>
             </View>
 
-            {/*전체 # 칸 중 3번째 칸, 랭킹이 들어가는 칸*/}
-            <View style={styles.contents3}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image 
-                            source={require('../../assets/images/ranking(x4).png')}
-                            style={{width: wp('4%') , height: wp('4%')}}
-                            resizeMode={'contain'}
-                    />
-                    <Text>
-                        실시간 우리학교 랭킹
-                    </Text>
-                </View>
-                <View style={{alignItems: 'center'}}>            
-                    <TouchableOpacity 
-                        onPress={this._onPress}>
-                        <Image 
-                            source={require('../../assets/images/upload(x4).png')}
-                            style={{width: wp('70%') , height: hp('10%')}}
-                            resizeMode={'contain'}
-                        />
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.container2}> 
+                <FlatList
+                    data={this.props.data}
+                    renderItem={({item}) => 
+                        <Card key={item.key} text={item.key}/>
+                    }
+                    refreshing={this.props.isFetching}
+                    onRefresh={this.props.refresh}
+                />        
             </View>
 
-            {/*전체 # 칸 중 4번째 칸, 광고가 들어가는 칸*/}
-            <View style={styles.contents4}>
-                <View style={{alignItems: 'center'}}>
-                    <Image 
-                            source={require('../../assets/images/ad(x4).png')}
-                            style={{width: wp('70%') , height: wp('30%')}}
-                            resizeMode={'contain'}
-                    />
-                </View>
-            </View>
-
-            {/*전체 # 칸 중 5번째 칸, XX가 들어가는 칸*/}
-            <View style={styles.contents5}>
-            </View>            
         </View>
         );
     }
@@ -129,8 +119,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         marginTop: 25
     },
+    container2: {
+        flex: 10,
+        alignItems: 'center'
+    }, 
     contents3: {
-        flex: 8,
+        flex: 2,
         marginHorizontal: 40
     },
     contents4: {

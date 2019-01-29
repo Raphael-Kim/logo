@@ -13,7 +13,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash(x4).png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {

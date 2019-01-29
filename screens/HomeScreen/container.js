@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import HomeScreen from "./presenter";
 import { AppLoading, Font } from 'expo';
 
-class Container extends Component {
+class Container extends React.PureComponent {
     static propTypes = {
         feed: PropTypes.array,
         getFeed: PropTypes.func.isRequired
     };
+
+    data = [{key: 'a'}, {key: 'b'}]
 
     state = {
         isFetching: false,
@@ -27,6 +29,7 @@ class Container extends Component {
     }
     
     render() {
+        console.log("container render");
         /* for font(start) */
         if(!this.state.loaded) {
             return <AppLoading />;
@@ -34,16 +37,22 @@ class Container extends Component {
         /* for font(end) */
         
         return (
-            <HomeScreen {...this.props} {...this.state} refresh={this._refresh} />
+            <HomeScreen {...this.props} {...this.state} refresh={this._refresh} data={this.data} />
         );
     }
 
     _refresh = () => {
-        const { getFeed } = this.props;
+        // const { getFeed } = this.props;
         this.setState({
             isFetching: true
         });
-        getFeed();
+        // getFeed();
+        this.data.push({key: 'c'});
+        setTimeout(() => {
+            this.setState({
+                isFetching: false
+            });
+        }, 10000);
     };
 
     /*for font(start)*/
