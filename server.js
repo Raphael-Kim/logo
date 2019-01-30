@@ -119,3 +119,16 @@ app.post('/changeProfileImg', function(req, res){
     });
 });
 
+app.post('/askSubmit', function(req, res){
+	console.log(req.body); 
+    var data = {
+        writerCode: req.body.userCode,
+        name: req.body.name, 
+        content: req.body.contents
+    };
+    var sql = 'INSERT INTO ask SET ?';
+    db.query(sql, data, (err, result)=>{
+        if(err) throw err;
+        console.log(result);
+    });
+});

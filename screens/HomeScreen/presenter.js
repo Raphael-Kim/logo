@@ -1,8 +1,11 @@
 import React from 'react';
-import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform } from 'react-native';
+import { ImageBackground, View, Text, Image, StyleSheet, Platform, TouchableOpacity, Easing, FlatList, KeyboardAvoidingView} from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AnimatedCircularProgress } from '../../circular-progress(RN)';
 import Card from '../../components/Card(feed)'
+import Modal from 'react-native-modal';
+import { TextInput } from 'react-native-gesture-handler';
+import { Header } from 'react-navigation';
 
 class HomeScreen extends React.Component {
 
@@ -49,13 +52,37 @@ class HomeScreen extends React.Component {
             {/*전체 # 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
             <View style={styles.contents2}>
                 <TouchableOpacity 
-                    onPress={() => {this.circularProgress.reAnimate(0, 100, 800, Easing.quad);} }>
+                    onPress={this.props.ask}>
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
                         style={{width: wp('80%') , height: hp('15%')}}
                         resizeMode={'contain'}
                     />
                 </TouchableOpacity>
+                <View style={{ flex: 1 }}>
+                    <Modal 
+                        isVisible={this.props.visibleModal}
+                        avoidKeyboard={true} 
+                        onBackdropPress={this.props.ask}>
+                        <KeyboardAvoidingView style={styles.ask} keyboardVerticalOffset={Header.HEIGHT} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
+                            <View style={styles.submitContents}>
+                                <TextInput
+                                    style={styles.textInput1}
+                                    placeholder={'Describe your opinion or ask something to the other genius'}
+                                    returnKeyType={'done'}
+                                    maxLength={2000}
+                                    multiline={true}
+                                    onChangeText={this.props.askContents}
+                                    autoCorrect={false}
+                                    autoFocus={true}
+                                    value={this.props.askContents}/>
+                            </View>
+                            <TouchableOpacity onPress={this.props.submit} style={styles.submitButton}>
+                                <Text style={{ fontFamily: 'godoRoundedR', color: 'white', fontSize: wp('8%')}}>Submit</Text>
+                            </TouchableOpacity>
+                        </KeyboardAvoidingView>
+                    </Modal>
+                </View>
             </View>
 
             <View style={styles.container2}> 
@@ -111,6 +138,37 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    ask:{
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: hp('40%'),
+        width: wp('90%')
+    },
+    submitContents:{
+        height: hp('35%'),
+        width: wp('75%'),
+        borderRadius: 20,
+        borderColor: 'black',
+        marginTop: 3
+    },  
+    submitButton:{
+        backgroundColor: 'lightblue',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: hp('7%'),
+        width: wp('20%')
+    },
+    textInput1:{
+        marginTop: 10,
+        fontFamily: 'NanumSquareR', 
+        fontSize: 18,
+        color: 'black',
+    },  
     textInput:{
         fontFamily: 'NanumSquareR', 
         fontSize: 12,

@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import QuestionScreen from "./presenter";
+import CommentScreen from "./presenter";
 import {Font} from 'expo';
 
 class Container extends Component {
     state={
         loaded: false,
         /* 폰트 로드 */
-        writer: '해당 글의 글쓴이 from DB',
-        askContents: '해당 글 내용 from DB'
     };
 
     componentWillMount(){
@@ -26,7 +24,7 @@ class Container extends Component {
 
     render() {
         return (
-          <QuestionScreen 
+          <CommentScreen 
             {...this.props} 
             {...this.state}
             />

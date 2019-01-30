@@ -1,6 +1,6 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import CommentScreen from '../screens/CommentScreen';
 import QuestionScreen from '../screens/QuestionScreen';
 
 // API: createStackNavigator(RouteConfigs, StackNavigatorConfig);
@@ -9,8 +9,8 @@ const AppNavigator  = createStackNavigator(
         Home: {
             screen: HomeScreen
         },
-        Profile: {
-            screen: ProfileScreen
+        Comment: {
+            screen: CommentScreen
         },
         Question: {
             screen: QuestionScreen

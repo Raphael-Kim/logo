@@ -13,7 +13,11 @@ class Container extends React.PureComponent {
 
     state = {
         isFetching: false,
-        loaded: false // for font
+        loaded: false, // for font
+        visibleModal: false, //for modal screen(for asking)
+        askContents: 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ',
+        name: '최기환',
+        userCode: '1',
     };
 
     componentWillReceiveProps = (nextProps) => {
@@ -37,10 +41,37 @@ class Container extends React.PureComponent {
         /* for font(end) */
         
         return (
-            <HomeScreen {...this.props} {...this.state} refresh={this._refresh} data={this.data} />
+            <HomeScreen 
+            {...this.props} 
+            {...this.state}
+            ask={this._ask} 
+            refresh={this._refresh} 
+            data={this.data}
+            submit={this._submit}
+             />
         );
     }
 
+    _ask = () => {
+        this.setState({ visibleModal: !this.state.visibleModal});
+    };
+
+    _submit = () => {
+        this.setState({ visibleModal: !this.state.visibleModal});
+        fetch('http://18.222.158.114:3210/askSubmit', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+            {
+                name: this.state.name,
+                contents: this.state.askContents,
+                userCode: this.state.userCode
+            })
+        });  
+    };
     _refresh = () => {
         // const { getFeed } = this.props;
         this.setState({
