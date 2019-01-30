@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Image, StyleSheet, Platform, Text } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { LinearGradient } from 'expo';
 
-class Card extends React.PureComponent {
+class Card extends React.Component {
     render() {
         console.log("card render");
         return(
@@ -10,7 +11,11 @@ class Card extends React.PureComponent {
                 <View style={styles.view1}>
                     <Text> {this.props.text} </Text>
                 </View>
+                
                 <View style={styles.view2}>
+                    <LinearGradient 
+                        colors={['#F3F0FF', 'white']} 
+                        style={{flex: 1, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}/>
                     <Image
                         source={require('../../assets/images/suzi(x4).png')} 
                         style={styles.profile} 
@@ -33,7 +38,7 @@ const styles = StyleSheet.create({
         flex: 1.5, 
         borderBottomLeftRadius: 10, 
         borderBottomRightRadius: 10, 
-        backgroundColor:'#F3F0FF'
+//        backgroundColor:'#F3F0FF'
     },
     profile: {
         position: 'absolute',
@@ -44,6 +49,7 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: 'white',
+        marginHorizontal: 20,
         borderRadius: 10,
         width: wp('90%'),
         height: hp('40%'),

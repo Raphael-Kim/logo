@@ -134,7 +134,7 @@ class SignUpScreen3 extends React.Component{
 
                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                         <TouchableOpacity 
-                            onPress={this.submit /* redux이 isloggedin을 true로 바꿔주는 action creator가 dispatch 될 자리*/}
+                            onPress={() => {this.props.logIn('abc')}}
                             disabled={this.state.signUpState}>
                             {this.state.signUpState === true ? 
                             <Image source={require('../../assets/images/SignUpDisable.png')}/>:

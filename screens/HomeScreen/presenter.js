@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AnimatedCircularProgress } from '../../circular-progress(RN)';
@@ -8,6 +8,7 @@ class HomeScreen extends React.Component {
 
     render(){
         console.log("presenter render");
+
         return(
         <View style={styles.container}>
 
@@ -49,10 +50,10 @@ class HomeScreen extends React.Component {
             {/*전체 # 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
             <View style={styles.contents2}>
                 <TouchableOpacity 
-                    onPress={() => {this.circularProgress.reAnimate(0, 100, 800, Easing.quad);} }>
+                    onPress={() => {this.props.logOut('hoho');/*this.circularProgress.reAnimate(0, 100, 800, Easing.quad);*/} }>
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
-                        style={{width: wp('80%') , height: hp('15%')}}
+                        style={{width: wp('90%') , height: hp('15%')}}
                         resizeMode={'contain'}
                     />
                 </TouchableOpacity>
@@ -61,11 +62,39 @@ class HomeScreen extends React.Component {
             <View style={styles.container2}> 
                 <FlatList
                     data={this.props.data}
-                    renderItem={({item}) => 
-                        <Card key={item.key} text={item.key}/>
-                    }
+                    renderItem={({item}) => { 
+                        if(item.key === 'a') {
+                            return(
+                            <View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: wp('5%'), marginBottom: hp('2%')}}>
+                                    <Image 
+                                            source={require('../../assets/images/ranking(x4).png')}
+                                            style={{width: wp('5%') , height: wp('5%'), marginRight: wp('2%')}}
+                                            resizeMode={'contain'}
+                                    />
+                                    <Text>
+                                        광고(ad)
+                                    </Text>
+                                </View>
+                                <View style={{alignItems: 'center', /* backgroundColor:'black' */}}>
+                                    <Image 
+                                    source={require('../../assets/images/ad(x4).png')}
+                                    style={{width: wp('90%'), height: hp('15%'), marginBottom: hp('5%')}}
+                                    resizeMode={'contain'}
+                                    />
+                                </View>
+                            </View>
+                            );
+                        } else {
+                            return(
+                            <Card text={item.key}/>);
+                        }
+                    }}
                     refreshing={this.props.isFetching}
                     onRefresh={this.props.refresh}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={this.props.addData}
+                    keyExtractor={this.props.keyExtractor}
                 />        
             </View>
 
@@ -121,7 +150,6 @@ const styles = StyleSheet.create({
     },
     container2: {
         flex: 10,
-        alignItems: 'center'
     }, 
     contents3: {
         flex: 2,
