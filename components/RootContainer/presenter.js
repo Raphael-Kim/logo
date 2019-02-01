@@ -6,8 +6,13 @@ import LoggedInNavigation from "../../navigation/LoggedInNavigation";
 
 class RootContainer extends Component {
     static propTypes = {
-        isLoggedIn: PropTypes.bool.isRequired
+        isLoggedIn: PropTypes.bool.isRequired,
+        checkTokenForKakao: PropTypes.func.isRequired
     };
+
+    componentWillMount(){
+        this.props.checkTokenForKakao();
+    }
 
     render() {
         const { isLoggedIn } = this.props;

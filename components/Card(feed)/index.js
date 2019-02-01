@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Platform, Text } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo';
 
-class Card extends React.Component {
+class Card extends React.PureComponent {
     render() {
         console.log("card render");
         return(
