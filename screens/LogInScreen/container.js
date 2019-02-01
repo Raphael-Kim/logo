@@ -20,7 +20,7 @@ class Container extends React.Component {
             <LogInScreen 
                 {...this.props} 
                 {...this.state} 
-                handleKakaoLogIn={this._handleKakaoLogIn}
+                handleKakaoLogIn={this.props.kakaoLogin}
                 handleKakaoLogOut={this._handleKakaoLogOut}
                 connetToKakao={this._connetToKakao}
                 disconnectToKakao={this._disconnectToKakao}
@@ -58,8 +58,11 @@ class Container extends React.Component {
                 });
                 // console.log(1);
                 let json = await response.json();
+                console.log(json);
                 await this.setState({ userInfo: json.access_token });
                 // console.log(2);
+                await this._connetToKakao();
+
                 this.props.navigation.navigate('SignUp1', {userInfo: this.state.userInfo});
             }
             catch(error) {

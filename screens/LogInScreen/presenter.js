@@ -11,7 +11,9 @@ class LogInScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true} />
-                <ImageBackground source={require('../../assets/images/background(x4).png')} style={{width: '100%', height: '100%'}} resizeMode={'cover'}>
+                <ImageBackground 
+                    source={require('../../assets/images/background(x4).png')} 
+                    style={{width: '100%', height: '100%'}} resizeMode={'cover'}>
                     <View style={styles.logo}> 
                         <Image
                             source={require('../../assets/images/logo(x4).png')}
@@ -20,8 +22,8 @@ class LogInScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.login}> 
-                        <TouchableOpacity onPress={this.props.handleKakaoLogIn}>
-                        {/* ↑ parent 컴포넌트의 _handleKakaoLogIn을 child 컴포넌트에게 주니깐,
+                        <TouchableOpacity onPress={this.props.handleKakaoLogIn(this.props.navigation)}>
+                            {/* ↑ parent 컴포넌트의 _handleKakaoLogIn을 child 컴포넌트에게 주니깐,
                             handleKakaoLogIn의 실행이 parent 단에서 돌아가더라! */}
                             <Image
                                 source={require('../../assets/images/kakao_login(x4).png')}

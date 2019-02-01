@@ -1,16 +1,16 @@
-import React from 'react';
-import { ImageBackground, View, Text, Image, StyleSheet, Platform, TouchableOpacity, Easing, FlatList, KeyboardAvoidingView} from 'react-native';
+import React, { Component } from 'react';
+import { ImageBackground, View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform, KeyboardAvoidingView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AnimatedCircularProgress } from '../../circular-progress(RN)';
 import Card from '../../components/Card(feed)'
-import Modal from 'react-native-modal';
-import { TextInput } from 'react-native-gesture-handler';
+import Modal from 'react-native-modal'; //yarn add react-native-modal 해야함
 import { Header } from 'react-navigation';
 
 class HomeScreen extends React.Component {
 
     render(){
         console.log("presenter render");
+
         return(
         <View style={styles.container}>
 
@@ -55,7 +55,7 @@ class HomeScreen extends React.Component {
                     onPress={this.props.ask}>
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
-                        style={{width: wp('80%') , height: hp('15%')}}
+                        style={{width: wp('90%') , height: hp('15%')}}
                         resizeMode={'contain'}
                     />
                 </TouchableOpacity>
@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
                                     returnKeyType={'done'}
                                     maxLength={2000}
                                     multiline={true}
-                                    onChangeText={this.props.askContents}
+                                    onChangeText={this.props.contents}
                                     autoCorrect={false}
                                     autoFocus={true}
                                     value={this.props.askContents}/>
@@ -88,11 +88,39 @@ class HomeScreen extends React.Component {
             <View style={styles.container2}> 
                 <FlatList
                     data={this.props.data}
-                    renderItem={({item}) => 
-                        <Card key={item.key} text={item.key}/>
-                    }
+                    renderItem={({item}) => { 
+                        if(item.key === 'a') {
+                            return(
+                            <View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: wp('5%'), marginBottom: hp('2%')}}>
+                                    <Image 
+                                            source={require('../../assets/images/ranking(x4).png')}
+                                            style={{width: wp('5%') , height: wp('5%'), marginRight: wp('2%')}}
+                                            resizeMode={'contain'}
+                                    />
+                                    <Text>
+                                        광고(ad)
+                                    </Text>
+                                </View>
+                                <View style={{alignItems: 'center', /* backgroundColor:'black' */}}>
+                                    <Image 
+                                    source={require('../../assets/images/ad(x4).png')}
+                                    style={{width: wp('90%'), height: hp('15%'), marginBottom: hp('5%')}}
+                                    resizeMode={'contain'}
+                                    />
+                                </View>
+                            </View>
+                            );
+                        } else {
+                            return(
+                            <Card text={item.key}/>);
+                        }
+                    }}
                     refreshing={this.props.isFetching}
                     onRefresh={this.props.refresh}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={this.props.addData}
+                    keyExtractor={this.props.keyExtractor}
                 />        
             </View>
 
@@ -140,11 +168,10 @@ const styles = StyleSheet.create({
     },
     ask:{
         backgroundColor: 'white',
-        justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-        height: hp('40%'),
+        height: hp('53%'),
         width: wp('90%')
     },
     submitContents:{
@@ -152,7 +179,7 @@ const styles = StyleSheet.create({
         width: wp('75%'),
         borderRadius: 20,
         borderColor: 'black',
-        marginTop: 3
+        marginTop: 15
     },  
     submitButton:{
         backgroundColor: 'lightblue',
@@ -161,12 +188,13 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
         height: hp('7%'),
-        width: wp('20%')
+        width: wp('20%'),
+        marginTop: 20
     },
     textInput1:{
         marginTop: 10,
         fontFamily: 'NanumSquareR', 
-        fontSize: 18,
+        fontSize: 15,
         color: 'black',
     },  
     textInput:{
@@ -179,7 +207,6 @@ const styles = StyleSheet.create({
     },
     container2: {
         flex: 10,
-        alignItems: 'center'
     }, 
     contents3: {
         flex: 2,

@@ -1,9 +1,10 @@
 import React from 'react';
-import {ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, ScrollView, TextInput, KeyboardAvoidingView, Platform} from 'react-native';
+import {ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, FlatList, ScrollView, TextInput, KeyboardAvoidingView, Platform} from 'react-native';
 import {AppLoading, Font} from 'expo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Header } from 'react-navigation';
 import { AnimatedCircularProgress } from '../../circular-progress(RN)';
+import Card from '../../components/Card(feed)'
 
 class QuestionScreen extends React.Component{
 
@@ -50,24 +51,44 @@ class QuestionScreen extends React.Component{
 
                 <View style={styles.contents2}>
                     <View style={styles.profileImgContainer}>
-                            <View style={styles.profileImg}></View>
+                        <View style={styles.profileImg}></View>
                     </View>
                     <View style={styles.Questioner}>
-                            <Text style={{fontFamily:'NanumSquareR', width: wp('8%'), color: 'white'}}>{this.props.writer}</Text>
+                        <Text style={{fontFamily:'NanumSquareR', color: 'white', fontSize: wp('3%'), padding: 10}}>{this.props.writer}님의 질문</Text>
                     </View>
                 </View>
 
                 <ScrollView style={styles.contents3}>
-                    <Text style={{fontFamily:'NanumSquareR', width: wp('13%'), color: 'white'}}>{this.props.askContents}</Text>
+                    <Text style={{fontFamily:'NanumSquareR', color: 'white', textAlign: 'center', fontSize: wp('5%')}}>{this.props.askContents}</Text>          
                 </ScrollView>
 
                 <View style={styles.contents4}>
+                    <FlatList
+                        data={this.props.data}
+                        renderItem={({item}) => { 
+                            return(<Card text={item.key}/>);
+                        }}
+                        refreshing={this.props.isFetching}
+                        onRefresh={this.props.refresh}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={this.props.addData}
+                        keyExtractor={this.props.keyExtractor}
+                        horizontal={true}
+                    />        
+                </View>
+
+                <View style={styles.contents5}>
+                     <View style={{flex: 1, borderRadius: 5}}>   
+                    <Image 
+                        source={require('../../assets/images/ad(x4).png')}
+                        style={{width: wp('100%'), height: hp('10%')}}
+                        resizeMode={'contain'}
+                    />
+                    </View>
                 </View>
             </ImageBackground>
         );
-
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -122,18 +143,17 @@ const styles = StyleSheet.create({
     contents2:{
         height: hp('15%'),
         width: wp('100%'),
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     profileImgContainer: {
-        padding: wp('10%'),
         height: hp('15%'),
-        width: wp('20%'),
-        alignItems: 'center',
+        width: wp('30%'),
+        alignItems: 'flex-end',
         justifyContent: 'center',
     },
     profileImg: {
-        height: 100,
-        width: 100,
+        height: 70,
+        width: 70,
         borderRadius: 50,
         backgroundColor: 'white'
     },
@@ -145,12 +165,17 @@ const styles = StyleSheet.create({
     contents3:{
         height: hp('15%'),
         width: wp('100%'),
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start'
     },
     contents4:{
-        height: hp('55%'),
+        height: hp('42%'),
         width: wp('100%'),
+    },
+    contents5:{
+        height: hp('13%'),
+        width: wp('100%'),
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 
