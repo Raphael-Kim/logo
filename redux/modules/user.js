@@ -10,7 +10,7 @@ const SET_TOKEN = 'SET_TOKEN'
 const SET_USER = 'SET_USER'
 const LOG_IN = 'LOG_IN'
 const LOG_OUT = 'LOG_OUT'
-
+const SET_USERCODE = 'SET_USERCODE'
 
 // Action Creators
 function setToken(token) {
@@ -20,10 +20,10 @@ function setToken(token) {
     };
 }
 
-function setUser(user) {
+function setUser(userInfo) {
     return {
         type: SET_USER,
-        user
+        userInfo
     };
 }
 
@@ -36,6 +36,13 @@ function setLogIn() {
 function setLogOut() {
     return {
         type: LOG_OUT
+    };
+}
+
+function setUserCode(userCode) {
+    return {
+        type: SET_USERCODE,
+        userCode
     };
 }
 
@@ -73,6 +80,7 @@ function kakaoLogin(navigation) {
                 });
                 // console.log(1);
                 var json = await response.json();
+                console.log(json);
                 dispatch(setToken(json));
 
                 /* ↓ [3단계] 사용자 정보 요청(token 이용)
@@ -86,6 +94,7 @@ function kakaoLogin(navigation) {
                         }
                     });
                     json = await response.json();
+                    console.log(json);
                     dispatch(setUser(json));
 
                     /* [4단계] DB와 대조(kakaoID 이용)
@@ -103,22 +112,42 @@ function kakaoLogin(navigation) {
                         });
                         json = await response.json();
                         if(Object.keys(json).length === 0) {
-                            navigation.navigate('SignUp1'); // 회원가입이 아니라 '회원정보 업데이트'를 구현할 것!
+                            navigation.navigate('SignUp_Info'); // → 회원가입이 아니라 '회원정보 업데이트'를 구현할 것!
                         } else {
-                            dispatch(setLogIn());
+                            try{
+                                // console.log(json[0]);
+                                // console.log(json[0].kakaoCode);
+                                let response = await fetch('http://18.222.158.114:3210/fetchUserCode', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Accept': 'application/json;charset=UTF-8',
+                                        'Content-Type': 'application/json;charset=UTF-8'
+                                    },
+                                    body: JSON.stringify({
+                                        kakaoCode: json[0].kakaoCode         
+                                    })
+                                })
+                                json = await response.json();
+                                dispatch(setUserCode(json[0].userCode));
+                                dispatch(setLogIn());
+                                // console.log(getState());
+                            }
+                            catch(error) {
+                                console.log('error_userCode')
+                            }
                         }
                     }
                     catch(error) {
-                        console.log('error');
+                        console.log('error_4단계');
                     }
                 }
                 catch(error) {
-                    console.log('error');
+                    console.log('error_3단계');
                 }  
                 // console.log(2);   
             }
             catch(error) {
-                console.log('error');
+                console.log('error3_2단계');
             }
             // console.log(3);
         }
@@ -139,7 +168,7 @@ function checkTokenForKakao() {
             });
             var json = await response.json();
             // json = {code: -401}; (for test)
-            json = {code: 0}; // logOut 시키기 위해서
+            json = {code: 10}; 
 
             if(json.code === -1) {
                 console.log('카카오톡의 일시적인 서비스 장애입니다!');
@@ -173,7 +202,7 @@ function checkTokenForKakao() {
                 catch(error){
                     console.log('error');
                 }
-            } else if (json.code) {
+            } else if(json.code) { // code 수정해야 함 **
                 /* [2단계] 로그아웃
                 ※ V_2(async&await 만으로 fetch를 구현, V_1은 LogInScreen/container.js에 有) */
                 try{
@@ -197,6 +226,7 @@ function checkTokenForKakao() {
     };
 }
 
+
 // Initial State
 const initialState = {
     isLoggedIn: false
@@ -215,6 +245,8 @@ function reducer(state = initialState, action) {
             return applySetUser(state, action);
         case LOG_OUT:
             return applyLogOut(state, action);
+        case SET_USERCODE:
+            return applySetUserCode(state, action);
     };
 }
 
@@ -227,10 +259,10 @@ function applySetToken(state, action) {
 }
 
 function applySetUser(state, action) {
-    const { user } = action;
+    const { userInfo } = action;
     return {
         ...state,
-        user
+        userInfo
     };
 }
 
@@ -248,10 +280,20 @@ function applyLogOut(state, action) {
     };
 }
 
+function applySetUserCode(state, action) {
+    const { userCode } = action;    
+    return {
+        ...state,
+        userCode
+    };
+}
+
 // Exports
 const actionCreators = {
     kakaoLogin,
-    checkTokenForKakao
+    checkTokenForKakao,
+    setLogIn,
+    setUserCode
 };
 
 export { actionCreators };

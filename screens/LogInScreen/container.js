@@ -20,13 +20,46 @@ class Container extends React.Component {
             <LogInScreen 
                 {...this.props} 
                 {...this.state} 
-                handleKakaoLogIn={this.props.kakaoLogin}
-                handleKakaoLogOut={this._handleKakaoLogOut}
-                connetToKakao={this._connetToKakao}
-                disconnectToKakao={this._disconnectToKakao}
+                kakaoLogIn={this.props.kakaoLogin}
+                // handleKakaoLogOut={this._handleKakaoLogOut}
+                // connetToKakao={this._connetToKakao}
+                // disconnectToKakao={this._disconnectToKakao}
             />
         );
     }
+
+}
+
+export default Container;
+
+/* V_1
+    ※ log 찍히는 순서: 2 → 1
+    let body =
+    `grant_type=authorization_code` +
+    `&client_id=${KAKAO_APP_KEY}` +
+    `&code=${result.params.code}` +
+    `&redirect_uri=${encodeURIComponent(redirectUrl)}`
+    fetch('https://kauth.kakao.com/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json;charset=UTF-8',
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+        body: body
+    })
+    .then(response => {
+        console.log(1)
+        return response.json();
+    })
+    .then(json => {
+        this.setState({ userInfo: json.access_token });
+        console.log(this.state);
+        this.props.navigation.navigate('SignUp1', {userInfo: this.state.userInfo});
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    console.log(2); 
 
     _handleKakaoLogIn = async () => {
         let redirectUrl = AuthSession.getRedirectUrl();
@@ -41,7 +74,7 @@ class Container extends React.Component {
             this.setState({ didError: true });
         } else { 
             /* V_2(async&await 만으로 fetch를 구현, V_1은 하단에 有)
-            ※ log 찍히는 순서: 1 → 2 → 3 */ 
+            ※ log 찍히는 순서: 1 → 2 → 3  
             try {
                 let body =
                 `grant_type=authorization_code` +
@@ -125,36 +158,4 @@ class Container extends React.Component {
             console.error(error);
         })
     };
-}
-
-export default Container;
-
-/* V_1
-    ※ log 찍히는 순서: 2 → 1
-    let body =
-    `grant_type=authorization_code` +
-    `&client_id=${KAKAO_APP_KEY}` +
-    `&code=${result.params.code}` +
-    `&redirect_uri=${encodeURIComponent(redirectUrl)}`
-    fetch('https://kauth.kakao.com/oauth/token', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json;charset=UTF-8',
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-        body: body
-    })
-    .then(response => {
-        console.log(1)
-        return response.json();
-    })
-    .then(json => {
-        this.setState({ userInfo: json.access_token });
-        console.log(this.state);
-        this.props.navigation.navigate('SignUp1', {userInfo: this.state.userInfo});
-    })
-    .catch(error => {
-        console.error(error);
-    })
-    console.log(2); 
 */ 

@@ -4,12 +4,10 @@ import {AppLoading, Font} from 'expo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Header } from 'react-navigation';
 
-class SignUpScreen1 extends React.Component{
+class SignUpScreen_Info extends React.Component{
 
     render(){
-        const {email} = this.props.email;
-        const {name} = this.props.name;
-        const {nickName} = this.props.nickName;
+        const {email, name} = this.props;
 
         /* for font(start) */
         if(!this.props.loaded) {
@@ -47,86 +45,41 @@ class SignUpScreen1 extends React.Component{
                         <TextInput 
                             style={styles.textInput1}
                             placeholder={'E-mail'}
+                            defaultValue={email}
                             returnKeyType={'done'}
-                            keyboardType={'email-address'}
                             maxLength={35}
                             onChangeText={this.props.signUpEmail}
                             autoCorrect={false}
-                            autoFocus={true}
-                            value={email}/>
+                            value={email}
+                            keyboardType={'email-address'}/>
                         {this.props.checkEmail === true ? null:
                         <View style={styles.forNick}>
                             <Text style={styles.textNick}>이메일 형식에 맞지 않습니다!</Text> 
                         </View>}
-
                         <TextInput 
                             style={styles.textInput2}
-                            placeholder={'이름'}
+                            placeholder={'name'}
+                            defaultValue={name}
                             returnKeyType={'done'}
                             maxLength={6}
                             onChangeText={this.props.signUpName}
-                            autoFocus={true}
                             autoCorrect={false}
                             value={name}/>
-
-                        {/*닉네임으로 활동하시겠습니까 문구 및 props.yes,no 버튼 히든 관리, 위에서 이름을 칠 경우 hidden1 이 false가 되어 아래 부분이 보여짐*/}
-                        {this.props.hidden1 === true ? null:
-                        <View style={styles.forNick}>
-                            <Text style={styles.textNick}>닉네임으로 활동하시겠습니까?</Text>
-                            <TouchableOpacity 
-                                onPress={this.props.yes}>
-                                <Image source={this.props.yesImg}/>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity 
-                                onPress={this.props.no}>
-                                <Image source={require('../../assets/images/noLogin.png')}/>
-                            </TouchableOpacity> 
-                        </View>}
-                        
-                        {/*닉네임 입력칸 버튼 히든 관리, 위에서 props.yes를 클릭할 경우 hidden2 가 false가 되어 아래 부분이 보여짐*/}
-                        {this.props.hidden2 === true ? null:
-                        <View>
-                            <View>
-                                <TextInput
-                                    style={styles.textInput2}
-                                    placeholder={'닉네임'}
-                                    returnKeyType={'done'}
-                                    maxLength={8}
-                                    onChangeText={this.props.signUpNickName}
-                                    autoCorrect={false}
-                                    autoFocus={true}
-                                    value={nickName}/>
-                            </View>    
-                        </View>}
-                        
-                        {/*닉네임 확인 결과 알림 버튼 히든 관리, 현재는 위에서 로고를 클릭할 경우 hidden3 가 false 그 외의 경우 hidden4 가 false*/}
-                        {this.props.hidden3 === true ? null:
-                            <View style={styles.forNick}>
-                                <Text style={styles.textNick2}>사용 가능한 닉네임입니다.</Text>
-                            </View>}
-                        {this.props.hidden4 === true ? null:
-                            <View style={styles.forNick}>
-                                <Text style={styles.textNick3}>이미 사용 중인 닉네임입니다.</Text>
-                            </View>}
                         <View style={{flex: 1, /*backgroundColor: 'white'(for test)*/}}></View>
                     </View>
                 </KeyboardAvoidingView>
-
+                        
                 {/*전체 3 칸 중 3번째 칸, 화살표 버튼이 들어가는 칸*/}
                 <View style={styles.contents3}>
                     <TouchableOpacity
-                        onPress={this._onPressButton} 
-                        disabled={this.props.leftState}>
-                        {this.props.leftState === true ? 
-                        <Image source={require('../../assets/images/leftBlock.png')}/>:
-                        <Image source={require('../../assets/images/left.png')}/>}
+                        // onPress={}
+                        disabled={true}
+                        >
+                        <Image source={require('../../assets/images/leftBlock.png')}/>
                     </TouchableOpacity>
 
                     <TouchableOpacity 
-                        onPress={() => {this.props.navigation.navigate('SignUp2',
-                            {email: this.props.email, name: this.props.name, nickName: this.props.nickName});
-                        }}
+                        onPress={() => {this.props.navigation.navigate('SignUp_Agreement', {email, name, kakaoCode: this.props.userInfo.id});}}
                         disabled={this.props.rightState}>
                         {this.props.rightState === true ? 
                         <Image source={require('../../assets/images/rightBlock.png')}/>:
@@ -221,16 +174,6 @@ const styles = StyleSheet.create({
         fontSize: 11,
         color: '#292F6E',
     },
-    textNick2:{
-        fontFamily: 'NanumSquareR',
-        fontSize: 11,
-        color: '#009E19',
-    },
-    textNick3:{
-        fontFamily: 'NanumSquareR',
-        fontSize: 11,
-        color: '#F10000',
-    },
     contents3: {
         flex: 2.8,
         flexDirection: 'row',
@@ -261,4 +204,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUpScreen1;
+export default SignUpScreen_Info;

@@ -22,7 +22,7 @@ class LogInScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.login}> 
-                        <TouchableOpacity onPress={ () => {this.props.handleKakaoLogIn(this.props.navigation);} }>
+                        <TouchableOpacity onPress={ () => {this.props.kakaoLogIn(this.props.navigation);} }>
                             {/* ↑ parent 컴포넌트의 _handleKakaoLogIn을 child 컴포넌트에게 주니깐,
                             handleKakaoLogIn의 실행이 parent 단에서 돌아가더라! */}
                             <Image

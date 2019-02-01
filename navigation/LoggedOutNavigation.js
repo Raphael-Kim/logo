@@ -1,9 +1,7 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import LogInScreen from '../screens/LogInScreen';
-import SignUpScreen1 from '../screens/SignUpScreen1';
-import SignUpScreen2 from '../screens/SignUpScreen2';
-import SignUpScreen3 from '../screens/SignUpScreen3';
-import ProfileScreen from '../screens/ProfileScreen';
+import SignUpScreen_Info from '../screens/SignUpScreen(Info)';
+import SignUpScreen_Agreement from '../screens/SignUpScreen(Agreement)';
 
 // API: createStackNavigator(RouteConfigs, StackNavigatorConfig);
 const AppNavigator  = createStackNavigator(
@@ -11,17 +9,11 @@ const AppNavigator  = createStackNavigator(
         LogIn: {
             screen: LogInScreen
         },
-        SignUp1: {
-            screen: SignUpScreen1
+        SignUp_Info: {
+            screen: SignUpScreen_Info
         },
-        SignUp2: {
-            screen: SignUpScreen2
-        },
-        SignUp3: {
-            screen: SignUpScreen3
-        },
-        Profile: {
-            screen: ProfileScreen
+        SignUp_Agreement: {
+            screen: SignUpScreen_Agreement
         }
     },
     {

@@ -11,8 +11,11 @@ const mapStateToProps = (state, ownProps) => {
     
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logIn: (token) => {
-            dispatch(userActions.setLogIn(token));
+        logIn: () => {
+            dispatch(userActions.setLogIn());
+        },
+        setUserCode: () => {
+            dispatch(userActions.setUserCode());
         }
     };
 };

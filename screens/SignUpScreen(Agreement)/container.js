@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import SignUpScreen3 from "./presenter";
+import SignUpScreen_Agreement from "./presenter";
 
 class Container extends Component {
     render() {
         return (
-          <SignUpScreen3 {...this.props} {...this.state} />
+          <SignUpScreen_Agreement {...this.props} {...this.state} />
         );
     }
 }

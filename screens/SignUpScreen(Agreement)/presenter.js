@@ -4,7 +4,7 @@ import { AppLoading, Font } from 'expo';
 import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-class SignUpScreen3 extends React.Component{
+class SignUpScreen_Agreement extends React.Component{
     state={
         loaded: false,
         job: '',
@@ -127,14 +127,14 @@ class SignUpScreen3 extends React.Component{
                 {/*전체 3 칸 중 3번째 칸, 화살표 버튼이 들어가는 칸*/}
                 <View style={styles.contents3}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 40, /*backgroundColor: 'black'(for test)*/}}>
-                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignUp2');}} >
+                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignUp_Info');}} >
                             <Image source={require('../../assets/images/left.png')}/>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                         <TouchableOpacity 
-                            onPress={() => {this.props.logIn('abc')}}
+                            onPress={() => {this.submit();}}
                             disabled={this.state.signUpState}>
                             {this.state.signUpState === true ? 
                             <Image source={require('../../assets/images/SignUpDisable.png')}/>:
@@ -198,30 +198,50 @@ class SignUpScreen3 extends React.Component{
         }
     }
 
-    submit = () => {
-        fetch('http://18.222.158.114:3210/submit', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-            {
-                email: this.props.navigation.state.params.email, 
-                name: this.props.navigation.state.params.name, 
-                nickName: this.props.navigation.state.params.nickName,
-                job: this.props.navigation.state.params.job,
-                schoolName: this.props.navigation.state.params.schoolName,
-                major: this.props.navigation.state.params.major,
-                secondMajor: this.props.navigation.state.params.secondMajor,
-                schoolNumber: this.props.navigation.state.params.schoolNumber,
-                check1: this.state.fordb1,
-                check2: this.state.fordb2,
-                check3: this.state.fordb3
-            })   
-        })
+    submit = async () => {
+        try{
+            let response = await fetch('http://18.222.158.114:3210/submit', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json;charset=UTF-8',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    email: this.props.navigation.state.params.email, 
+                    name: this.props.navigation.state.params.name, 
+                    check1: this.state.fordb1,
+                    check2: this.state.fordb2,
+                    check3: this.state.fordb3,
+                    kakaoCode: this.props.navigation.state.params.kakaoCode                   
+                })
+            });
+            //console.log(response);
+            try{
+                let response = await fetch('http://18.222.158.114:3210/fetchUserCode', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json;charset=UTF-8',
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        kakaoCode: this.props.navigation.state.params.kakaoCode                   
+                    })
+                })
+                var json = await response.json();
+                console.log(json);
+                this.props.setUserCode(json.userCode);
+                this.props.logIn();
+            }
+            catch(error) {
+                console.log('error_userCode')
+            }
+        }
+        catch(error){
+            console.log('error_submit');
+        }
     }
 }
+
 
 const styles = StyleSheet.create({
     container: { 
@@ -376,4 +396,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUpScreen3;
+export default SignUpScreen_Agreement;
