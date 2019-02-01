@@ -52,7 +52,11 @@ class HomeScreen extends React.Component {
             {/*전체 # 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
             <View style={styles.contents2}>
                 <TouchableOpacity 
+<<<<<<< HEAD
                     onPress={this.props.ask}>
+=======
+                    onPress={() => {this.props.checkTokenForKakao();/*this.circularProgress.reAnimate(0, 100, 800, Easing.quad);*/} }>
+>>>>>>> ede67f028433d0fc249d3806d19ba8f42c4ae9d6
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
                         style={{width: wp('90%') , height: hp('15%')}}

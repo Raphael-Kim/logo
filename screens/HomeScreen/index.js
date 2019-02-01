@@ -11,8 +11,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logOut: (token) => {
-            dispatch(userActions.setLogOut(token));
+        checkTokenForKakao: () => {
+            dispatch(userActions.checkTokenForKakao());
         }
     };
 };

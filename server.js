@@ -21,27 +21,40 @@ app.listen(3210, ()=>{
     console.log('Always my eyes on here');
 });
 
-/*app.post('/submit', function(req, res){
+app.post('/submit', function(req, res){
 	console.log(req.body); 
     var data = {
         email: req.body.email, 
-        name: req.body.name, 
-        nickName: req.body.nickName,
-        job: req.body.job,
-        schoolName: req.body.schoolName,
-        major: req.body.major,
-        secondMajor: req.body.secondMajor,
-        schoolNumber: req.body.schoolNumber,
+        name: req.body.name,
         check1: req.body.check1,
         check2: req.body.check2,
-        check3: req.body.check3
+        check3: req.body.check3,
+        kakaoCode: req.body.kakaoCode
     };
-    var sql = 'INSERT INTO userinfo SET ?';
+    var sql = 'INSERT INTO userInfo SET ?';
     db.query(sql, data, (err, result)=>{
-        if(err) throw err;
-        console.log(result);
+        if(err){
+            throw err;
+        }else{
+            res.send(result);
+        } 
     });
-});*/
+});
+
+app.post('/fetchUserCode', function(req, res){
+    var data = {
+        kakaoCode: req.body.kakaoCode 
+    };
+    var sql = `SELECT userCode FROM userInfo WHERE kakaoCode = '${data.kakaoCode}'`;
+    db.query(sql, data, (err, result)=>{
+        if(err){
+            throw err;
+        }else{
+            console.log(result);
+            res.send(result);
+        } 
+    });
+});
 
 /*app.post('/searchNick', function(req, res){
     var data = {
