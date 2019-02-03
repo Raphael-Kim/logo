@@ -1,95 +1,142 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import HomeScreen from "./presenter";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import HomeScreen from './presenter';
 import { AppLoading, Font } from 'expo';
 
 class Container extends React.Component {
     static propTypes = {
-        feed: PropTypes.array,
+        askCard: PropTypes.array,
         getFeed: PropTypes.func
     };
 
-    data = [
-        {id: 1, key: 'a'}, 
-        {id: 2, key: '소그라테스의 주지주의란?'}, 
-        {id: 3, key: '내일 아침메뉴란?'}, 
-        {id: 4, key: '유부가 좋아요?'}, 
-        {id: 5, key: '젤리로 아침먹어도 되나요?'}, 
-        {id: 6, key: '점심을 꼭 드실건가요?'}, 
-        {id: 7, key: '퇴근하면 집가나요?'}, 
-        {id: 8, key: '여기까지 본걸 축하해요?'}, 
-        {id: 9, key: '질문 등록 잘하세요?'}]
-
-
     state = {
         isFetching: false,
-        loaded: false // for font
+        visibleModal: false, //for modal screen(for asking)
+        askContents: '',
+        curTime: '',
+        currentAskCode: ''
     };
 
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.feed) {
+        if(nextProps.feed) {
             this.setState({
                 isFetching: false
             });
         }
     };
 
-    componentWillMount(){
-        this._loadAssetsAsync();
+    componentWillMount() {
+        this.init();
     }
-    
+
     render() {
-        console.log("container render");
-        /* for font(start) */
-        if(!this.state.loaded) {
-            return <AppLoading />;
-        }
-        /* for font(end) */
+        console.log('container render');
         
         return (
             <HomeScreen 
                 {...this.props} 
                 {...this.state} 
                 refresh={this._refresh} 
-                addData={this._addData} 
+                onEndReached={this._onEndReached} 
                 keyExtractor={this._keyExtractor}
-                data={this.data} 
+                ask={this._ask}
+                submit={this._submit}
+                contents={this._contents}
             />
         );
     }
 
-    _refresh = () => {
-        // const { getFeed } = this.props;
-        this.setState({
-            isFetching: true
-        });
-        // getFeed();
-        this.data.push({id:11, key: '위에서 새로고침 하셨나요?'});
-        setTimeout(() => {
-            this.setState({
-                isFetching: false
+    init = async( ) => {
+        try{
+            let response = await fetch('http://18.222.158.114:3210/FetchNewAskCard', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
             });
-        }, 10000);
-    };
+            var json = await response.json();
+            // console.log(json);
+            await this.setState({currentAskCode: json.slice(-1)[0].askCode}); // → render_1
+            this.props.setAskCard(json); // → render_2
+            if(this.state.isFetching === true) {
+                this.setState({isFetching: false });
+            }
+            // await this.setState({currentAskCode: json[0].askCode}); 
+            // console.log(this.state.currentAskCode);
+        }
+        catch(error){
+            console.log('error_init');
+        }
+    }
 
-    _addData = () => {
-        console.log('발동');
-        this.data.push({id:10, key: '밑에 추가된 아이템이군요?'});
+    _onEndReached = async() => {
+        try{
+            let response = await fetch('http://18.222.158.114:3210/FetchOldAskCard', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    currentAskCode: this.state.currentAskCode
+                })
+            });
+            var json = await response.json();
+            await this.setState({currentAskCode: json.slice(-1)[0].askCode}); // → render_1
+            this.props.addAskCard(json); // → render_2
+            // await this.setState({currentAskCode: json[0].askCode}); 
+            // console.log(this.state.currentAskCode);
+        }
+        catch(error){
+            console.log('onEndReached_error');
+        }        
+    }
+
+    _refresh = async () => {
+        await this.setState({ isFetching: true });
+        this.init();
     };
 
     _keyExtractor = (item, index) => {
-        return item.id.toString()
+        return item.askCode.toString()
     };
 
-    /*for font(start)*/
-    _loadAssetsAsync = async () =>{
-        await Font.loadAsync({
-            NanumSquareR: require("../../assets/fonts/NanumSquareR.ttf"),
-            godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf')
+    _contents = (TEXT) => {
+        this.setState({
+            askContents : TEXT
         });
-        this.setState({ loaded: true });
     };
-    /*for font(end)*/
+
+    _ask = () => { // → 질문등록 버튼 누르면 모달(madal) 출력위해 작동
+        this.setState({ 
+            visibleModal: !this.state.visibleModal,
+            askContents : ''
+        });
+    };
+
+    _submit = () => { // → 질문등록 모달(madal)에서 제출
+        this.setState({ 
+            visibleModal: !this.state.visibleModal,
+            curTime : new Date().toLocaleString()
+        }, () => {
+            fetch('http://18.222.158.114:3210/askSubmit', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(
+                {
+                    name: this.props.userProfile.name,
+                    userCode: this.props.userProfile.userCode,
+                    datetime: this.state.curTime,
+                    contents: this.state.askContents,
+                })
+            });  
+        });
+    };
+
 }
 
 export default Container;

@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import SignUpScreen_Info from "./presenter";
-import { Font } from 'expo';
 
-class Container extends Component {
+class Container extends React.Component {
     state={
-        loaded: false,
-        /*ㅊ폰트 로드 */
-
         email: '',
         name: '',
         /* ↑ 입력 받는 변수*/
@@ -26,7 +22,6 @@ class Container extends Component {
     };
 
     componentWillMount(){
-        this._loadAssetsAsync();
         if(this.props.userInfo.kakao_account.is_email_verified === true) {
             this.setState({ email: this.props.userInfo.kakao_account.email});
         }
@@ -37,16 +32,6 @@ class Container extends Component {
             this.setState({ rightState: false})
         }
     }
-
-    /* for font */
-    _loadAssetsAsync = async () =>{
-        await Font.loadAsync({
-          NanumSquareR: require('../../assets/fonts/NanumSquareR.ttf'),
-          godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf'),
-        });
-
-        this.setState({ loaded: true });
-    };
 
     render() {
         return (

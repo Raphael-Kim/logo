@@ -1,13 +1,11 @@
-import React from 'react';
-import { ImageBackground, StyleSheet, View, TouchableOpacity, Image, StatusBar, Button } from 'react-native';
+import React, { Component } from 'react';
+import { ImageBackground, StyleSheet, View, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 class LogInScreen extends React.Component {
-    
     render() {
         // console.log(this.props);
         // console.log(this.state);
-
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true} />
@@ -22,7 +20,7 @@ class LogInScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.login}> 
-                        <TouchableOpacity onPress={ () => {this.props.kakaoLogIn(this.props.navigation);} }>
+                        <TouchableOpacity onPress={ () => {this.props.kakaoLogIn();} }>
                             {/* ↑ parent 컴포넌트의 _handleKakaoLogIn을 child 컴포넌트에게 주니깐,
                             handleKakaoLogIn의 실행이 parent 단에서 돌아가더라! */}
                             <Image
@@ -32,12 +30,7 @@ class LogInScreen extends React.Component {
                             />
                         </TouchableOpacity>
                     </View>
-                </ImageBackground>
-                {
-                    // <Button title='LogOut(Session Out) Kakao Auth' onPress={this.props.handleKakaoLogOut}/>
-                    // <Button title='Connect to Kakao' onPress={this.props.connetToKakao} />
-                    // <Button title='Disconnect From Kakao' onPress={this.props.disconnectToKakao} />
-                }    
+                </ImageBackground>   
             </View>
         );
     }

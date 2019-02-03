@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform } from 'react-native';
+import { ImageBackground, View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Easing, FlatList, Platform, KeyboardAvoidingView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { AnimatedCircularProgress } from '../../circular-progress(RN)';
-import Card from '../../components/Card(feed)'
+import Card from '../../components/Card(HomeScreen)';
+import Modal from 'react-native-modal'; 
+/* ↑ yarn add(sudo npm install --save) react-native-modal: @7.0.2 */
+import { Header } from 'react-navigation';
 
 class HomeScreen extends React.Component {
 
     render(){
-        console.log("presenter render");
+        console.log('presenter render');
+        const { profile_image } = this.props.userInfo.properties
 
         return(
         <View style={styles.container}>
 
-            {/*전체 # 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
+            {/*전체 3 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
             <ImageBackground style={styles.contents1} source={require('../../assets/images/home(x4).png')} resizeMode={'stretch'}>
                 <View style={{flex: 1, marginLeft: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', marginTop: 5}}>
                 {/* ↑ <ImageBackground>가 row direction이라고 할지라도, 그 child인 <View>는 column direction이다! */}
                     <Image 
-                        source={require('../../assets/images/searchIcon(x4).png')}
+                        source={require('../../assets/images/searchIcon(x4).png')} 
                         style={{width: wp('5%') , height: wp('5%')}} 
                     />
                 </View>
@@ -35,10 +39,10 @@ class HomeScreen extends React.Component {
                             lineCap={'round'}
                             // tintColor: stroke 색깔
                             onAnimationComplete={() => console.log('onAnimationComplete')}
-                            backgroundColor="red">
+                            backgroundColor='red'>
                             {
                                 () => (<Image 
-                                            source={require('../../assets/images/suzi(x4).png')}
+                                            source={{uri: `${profile_image}`}}
                                             style={{width: '100%' , height: '100%'}} 
                                         />)
                             }
@@ -47,21 +51,46 @@ class HomeScreen extends React.Component {
                 </View>
             </ImageBackground>
 
-            {/*전체 # 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
+            {/*전체 3 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
             <View style={styles.contents2}>
                 <TouchableOpacity 
-                    onPress={() => {this.props.checkTokenForKakao();/*this.circularProgress.reAnimate(0, 100, 800, Easing.quad);*/} }>
+                    onPress={this.props.ask}>
                     <Image 
                         source={require('../../assets/images/upload(x4).png')}
                         style={{width: wp('90%') , height: hp('15%')}}
                         resizeMode={'contain'}
                     />
                 </TouchableOpacity>
+                <View style={{ flex: 1 }}>
+                    <Modal 
+                        isVisible={this.props.visibleModal}
+                        avoidKeyboard={true} 
+                        onBackdropPress={this.props.ask}>
+                        <KeyboardAvoidingView style={styles.ask} keyboardVerticalOffset={Header.HEIGHT} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
+                            <View style={styles.submitContents}>
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder={'Describe your opinion or ask something to the other genius'}
+                                    returnKeyType={'done'}
+                                    maxLength={2000}
+                                    multiline={true}
+                                    onChangeText={this.props.contents}
+                                    autoCorrect={false}
+                                    autoFocus={true}
+                                    value={this.props.askContents}/>
+                            </View>
+                            <TouchableOpacity onPress={this.props.submit} style={styles.submitButton}>
+                                <Text style={{ fontFamily: 'godoRoundedR', color: 'white', fontSize: wp('8%')}}>Submit</Text>
+                            </TouchableOpacity>
+                        </KeyboardAvoidingView>
+                    </Modal>
+                </View>
             </View>
 
-            <View style={styles.container2}> 
+            {/*전체 3 칸 중 3번째 칸, 질문등록 버튼이 들어가는 칸*/}
+            <View style={styles.contents3}> 
                 <FlatList
-                    data={this.props.data}
+                    data={this.props.askCard}
                     renderItem={({item}) => { 
                         if(item.key === 'a') {
                             return(
@@ -86,14 +115,13 @@ class HomeScreen extends React.Component {
                             </View>
                             );
                         } else {
-                            return(
-                            <Card text={item.key}/>);
+                            return(<Card {...item}/>);
                         }
                     }}
                     refreshing={this.props.isFetching}
                     onRefresh={this.props.refresh}
                     onEndReachedThreshold={0.5}
-                    onEndReached={this.props.addData}
+                    onEndReached={this.props.onEndReached}
                     keyExtractor={this.props.keyExtractor}
                 />        
             </View>
@@ -140,32 +168,39 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    ask:{
+        backgroundColor: 'white',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: hp('53%'),
+        width: wp('90%')
+    },
+    submitContents:{
+        height: hp('35%'),
+        width: wp('75%'),
+        borderRadius: 20,
+        borderColor: 'black',
+        marginTop: 15
+    },  
+    submitButton:{
+        backgroundColor: 'lightblue',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: hp('7%'),
+        width: wp('20%'),
+        marginTop: 20
+    },
     textInput:{
+        marginTop: 10,
         fontFamily: 'NanumSquareR', 
-        fontSize: 12,
+        fontSize: 15,
         color: 'black',
-        borderBottomColor: '#E5E5E5',
-        borderBottomWidth: 1,
-        marginTop: 25
     },
-    container2: {
-        flex: 10,
-    }, 
     contents3: {
-        flex: 2,
-        marginHorizontal: 40
-    },
-    contents4: {
-        flex: 8,
-        marginHorizontal: 40
-    },
-    content5: {
-        flex: 30,
-        marginHorizontal: 40,
-        backgroundColor: 'black'
-    },
-    scroll: {
-        backgroundColor: 'blue'
+        flex: 10,
     }
 });
 

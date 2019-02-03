@@ -1,12 +1,10 @@
 import React from 'react';
 import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import { AppLoading, Font } from 'expo';
 import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 class SignUpScreen_Agreement extends React.Component{
     state={
-        loaded: false,
         job: '',
         signUpState: true,
         check1: require('../../assets/images/beforeCheck.png'),
@@ -18,25 +16,8 @@ class SignUpScreen_Agreement extends React.Component{
         fordb3: false
     };
 
-    componentWillMount(){
-        this._loadAssetsAsync();
-    }
-
-    _loadAssetsAsync = async () =>{
-        await Font.loadAsync({
-          NanumSquareR: require("../../assets/fonts/NanumSquareR.ttf"),
-          godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf'),
-        });
-        this.setState({ loaded: true });
-    };
-    /*for font*/
-
     render(){
-        /*for font*/
-        if (!this.state.loaded){
-            return <AppLoading />;
-        }
-        /*for font*/
+
         return(
             <View style={styles.container}>
                 {/*전체 3 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
@@ -212,7 +193,8 @@ class SignUpScreen_Agreement extends React.Component{
                     check1: this.state.fordb1,
                     check2: this.state.fordb2,
                     check3: this.state.fordb3,
-                    kakaoCode: this.props.navigation.state.params.kakaoCode                   
+                    kakaoCode: this.props.navigation.state.params.kakaoCode,
+                    kakaoImg: this.props.userInfo.properties.profile_image
                 })
             });
             //console.log(response);
@@ -228,8 +210,8 @@ class SignUpScreen_Agreement extends React.Component{
                     })
                 })
                 var json = await response.json();
-                console.log(json);
-                this.props.setUserCode(json.userCode);
+                console.log(json[0]);
+                this.props.setUserProfile(json[0]);
                 this.props.logIn();
             }
             catch(error) {

@@ -53,7 +53,7 @@ class SignUpScreen_Info extends React.Component{
                             onChangeText={this.props.signUpEmail}
                             autoCorrect={false}
                             autoFocus={true}
-                            value={email}/>
+                            value={name}/>
                         {this.props.checkEmail === true ? null:
                         <View style={styles.forNick}>
                             <Text style={styles.textNick}>이메일 형식에 맞지 않습니다!</Text> 
