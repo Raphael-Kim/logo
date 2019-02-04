@@ -77,9 +77,13 @@ class RootContainer extends React.Component {
         console.log('loadImagesAsync start');
         await Asset.loadAsync([
             require('../../assets/images/background(x4).png'),
+            require('../../assets/images/logo(x4).png'),
+            require('../../assets/images/kakao_login(x4).png'),
+            require('../../assets/images/signUp(x4).png'),
+            require('../../assets/images/beforeCheck.png'), // → (x4)로 바꿀 것!
+            require('../../assets/images/afterCheck.png'), // → (x4)로 바꿀 것!
             require('../../assets/images/home(x4).png'),
-            require('../../assets/images/questionScreen(x4).png'),
-            require('../../assets/images/signUp(x4).png')
+            require('../../assets/images/questionScreen(x4).png')
         ]);
         console.log('loadImagesAsync end');
     };

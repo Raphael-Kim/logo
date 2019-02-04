@@ -1,6 +1,5 @@
 import React from 'react';
 import {ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform} from 'react-native';
-import {AppLoading, Font} from 'expo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Header } from 'react-navigation';
 
@@ -9,15 +8,12 @@ class SignUpScreen_Info extends React.Component{
     render(){
         const {email, name} = this.props;
 
-        /* for font(start) */
-        if(!this.props.loaded) {
-            return <AppLoading />;
-        }
-        /* for font(end) */
-
     /* V_1
         return(
-            <ImageBackground style={styles.container1} source={require('../../assets/images/SignUp2.png')} resizeMode={'stretch'}>
+            <ImageBackground 
+                style={styles.container1} 
+                source={require('../../assets/images/SignUp2.png')} 
+                resizeMode={'stretch'}>
                     <View style={styles.contents1}>
                         <Image source={require('../../assets/images/logo_font.png')} />
                     </View>
@@ -28,7 +24,10 @@ class SignUpScreen_Info extends React.Component{
     // V_2 ↓
         return(
             <View style={styles.container}>
-                <ImageBackground style={styles.contents1} source={require('../../assets/images/signUp(x4).png')} resizeMode={'stretch'}>
+                <ImageBackground 
+                    style={styles.contents1} 
+                    source={require('../../assets/images/signUp(x4).png')} 
+                    resizeMode={'stretch'}>
                     <View style={styles.logoView1}>
                         <Text style={styles.logo1}>logo</Text>
                     </View>
@@ -39,7 +38,10 @@ class SignUpScreen_Info extends React.Component{
                 </ImageBackground>
 
                 {/*전체 3 칸 중 2번째 칸, 내용이 들어가는 칸*/}
-                <KeyboardAvoidingView style={styles.contents2} keyboardVerticalOffset={Header.HEIGHT} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
+                <KeyboardAvoidingView 
+                    style={styles.contents2} 
+                    keyboardVerticalOffset={Header.HEIGHT} 
+                    behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <View style={{flex: 1, /*backgroundColor: 'white'(for test)*/}}></View>
                         <TextInput 
@@ -79,7 +81,9 @@ class SignUpScreen_Info extends React.Component{
                     </TouchableOpacity>
 
                     <TouchableOpacity 
-                        onPress={() => {this.props.navigation.navigate('SignUp_Agreement', {email, name, kakaoCode: this.props.userInfo.id});}}
+                        onPress={() => {
+                            this.props.navigation.navigate('SignUp_Agreement', {email, name, kakaoCode: this.props.userInfo.id});
+                        }}
                         disabled={this.props.rightState}>
                         {this.props.rightState === true ? 
                         <Image source={require('../../assets/images/rightBlock.png')}/>:

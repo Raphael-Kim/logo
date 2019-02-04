@@ -14,23 +14,24 @@ class HomeScreen extends React.Component {
         const { profile_image } = this.props.userInfo.properties
 
         return(
-        <View style={styles.container}>
+            <View style={styles.container}>
 
-            {/*전체 3 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
-            <ImageBackground style={styles.contents1} source={require('../../assets/images/home(x4).png')} resizeMode={'stretch'}>
-                <View style={{flex: 1, marginLeft: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', marginTop: 5}}>
-                {/* ↑ <ImageBackground>가 row direction이라고 할지라도, 그 child인 <View>는 column direction이다! */}
-                    <Image 
-                        source={require('../../assets/images/searchIcon(x4).png')} 
-                        style={{width: wp('5%') , height: wp('5%')}} 
-                    />
-                </View>
-                <View style={styles.logoView}>
-                    <Text style={styles.logo}>logo</Text>
-                </View>
-                <View style={{flex: 1, marginRight: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', alignItems: 'flex-end', marginTop: 5}}>
-                    <TouchableOpacity 
-                        onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);} }>
+                {/*전체 3 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
+                <ImageBackground style={styles.contents1} source={require('../../assets/images/home(x4).png')} resizeMode={'stretch'}>
+                    <View style={{flex: 1, marginLeft: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', marginTop: 5}}>
+                    {/* ↑ <ImageBackground>가 row direction이라고 할지라도, 그 child인 <View>는 column direction이다! */}
+                        <Image 
+                            source={require('../../assets/images/searchIcon(x4).png')} 
+                            style={{width: wp('5%') , height: wp('5%')}} 
+                        />
+                    </View>
+                    <View style={styles.logoView}>
+                        <TouchableOpacity
+                            onPress={() => {this.props.setLogOut();}}>
+                            <Text style={styles.logo}>logo</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flex: 1, marginRight: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', alignItems: 'flex-end', marginTop: 5}}>
                         <AnimatedCircularProgress
                             ref={(ref) => this.circularProgress = ref}
                             size={wp('11%')}
@@ -41,92 +42,98 @@ class HomeScreen extends React.Component {
                             onAnimationComplete={() => console.log('onAnimationComplete')}
                             backgroundColor='red'>
                             {
-                                () => (<Image 
+                                () => (
+                                    <TouchableOpacity 
+                                        onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);}}
+                                        style={{width: '100%' , height: '100%'}} // → style을 지정해야 <image>가 render()!
+                                    > 
+                                        <Image 
                                             source={{uri: `${profile_image}`}}
                                             style={{width: '100%' , height: '100%'}} 
-                                        />)
+                                        />
+                                    </TouchableOpacity>
+                                    )
                             }
                         </AnimatedCircularProgress>
+                    </View>
+                </ImageBackground>
+
+                {/*전체 3 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
+                <View style={styles.contents2}>
+                    <TouchableOpacity 
+                        onPress={this.props.ask}>
+                        <Image 
+                            source={require('../../assets/images/upload(x4).png')}
+                            style={{width: wp('90%') , height: hp('15%')}}
+                            resizeMode={'contain'}
+                        />
                     </TouchableOpacity>
-                </View>
-            </ImageBackground>
-
-            {/*전체 3 칸 중 2번째 칸, 질문등록 버튼이 들어가는 칸*/}
-            <View style={styles.contents2}>
-                <TouchableOpacity 
-                    onPress={this.props.ask}>
-                    <Image 
-                        source={require('../../assets/images/upload(x4).png')}
-                        style={{width: wp('90%') , height: hp('15%')}}
-                        resizeMode={'contain'}
-                    />
-                </TouchableOpacity>
-                <View style={{ flex: 1 }}>
-                    <Modal 
-                        isVisible={this.props.visibleModal}
-                        avoidKeyboard={true} 
-                        onBackdropPress={this.props.ask}>
-                        <KeyboardAvoidingView style={styles.ask} keyboardVerticalOffset={Header.HEIGHT} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
-                            <View style={styles.submitContents}>
-                                <TextInput
-                                    style={styles.textInput}
-                                    placeholder={'Describe your opinion or ask something to the other genius'}
-                                    returnKeyType={'done'}
-                                    maxLength={2000}
-                                    multiline={true}
-                                    onChangeText={this.props.contents}
-                                    autoCorrect={false}
-                                    autoFocus={true}
-                                    value={this.props.askContents}/>
-                            </View>
-                            <TouchableOpacity onPress={this.props.submit} style={styles.submitButton}>
-                                <Text style={{ fontFamily: 'godoRoundedR', color: 'white', fontSize: wp('8%')}}>Submit</Text>
-                            </TouchableOpacity>
-                        </KeyboardAvoidingView>
-                    </Modal>
-                </View>
-            </View>
-
-            {/*전체 3 칸 중 3번째 칸, 질문등록 버튼이 들어가는 칸*/}
-            <View style={styles.contents3}> 
-                <FlatList
-                    data={this.props.askCard}
-                    renderItem={({item}) => { 
-                        if(item.key === 'a') {
-                            return(
-                            <View>
-                                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: wp('5%'), marginBottom: hp('2%')}}>
-                                    <Image 
-                                            source={require('../../assets/images/ranking(x4).png')}
-                                            style={{width: wp('5%') , height: wp('5%'), marginRight: wp('2%')}}
-                                            resizeMode={'contain'}
-                                    />
-                                    <Text>
-                                        광고(ad)
-                                    </Text>
+                    <View style={{ flex: 1 }}>
+                        <Modal 
+                            isVisible={this.props.visibleModal}
+                            avoidKeyboard={true} 
+                            onBackdropPress={this.props.ask}>
+                            <KeyboardAvoidingView style={styles.ask} keyboardVerticalOffset={Header.HEIGHT} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
+                                <View style={styles.submitContents}>
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder={'Describe your opinion or ask something to the other genius'}
+                                        returnKeyType={'done'}
+                                        maxLength={2000}
+                                        multiline={true}
+                                        onChangeText={this.props.contents}
+                                        autoCorrect={false}
+                                        autoFocus={true}
+                                        value={this.props.askContents}/>
                                 </View>
-                                <View style={{alignItems: 'center', /* backgroundColor:'black' */}}>
-                                    <Image 
-                                    source={require('../../assets/images/ad(x4).png')}
-                                    style={{width: wp('90%'), height: hp('15%'), marginBottom: hp('5%')}}
-                                    resizeMode={'contain'}
-                                    />
-                                </View>
-                            </View>
-                            );
-                        } else {
-                            return(<Card {...item}/>);
-                        }
-                    }}
-                    refreshing={this.props.isFetching}
-                    onRefresh={this.props.refresh}
-                    onEndReachedThreshold={0.5}
-                    onEndReached={this.props.onEndReached}
-                    keyExtractor={this.props.keyExtractor}
-                />        
-            </View>
+                                <TouchableOpacity onPress={this.props.submit} style={styles.submitButton}>
+                                    <Text style={{ fontFamily: 'godoRoundedR', color: 'white', fontSize: wp('8%')}}>Submit</Text>
+                                </TouchableOpacity>
+                            </KeyboardAvoidingView>
+                        </Modal>
+                    </View>
+                </View>
 
-        </View>
+                {/*전체 3 칸 중 3번째 칸, 질문등록 버튼이 들어가는 칸*/}
+                <View style={styles.contents3}> 
+                    <FlatList
+                        data={this.props.askCard}
+                        renderItem={({item}) => { 
+                            if(item.key === 'a') {
+                                return(
+                                <View>
+                                    <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: wp('5%'), marginBottom: hp('2%')}}>
+                                        <Image 
+                                                source={require('../../assets/images/ranking(x4).png')}
+                                                style={{width: wp('5%') , height: wp('5%'), marginRight: wp('2%')}}
+                                                resizeMode={'contain'}
+                                        />
+                                        <Text>
+                                            광고(ad)
+                                        </Text>
+                                    </View>
+                                    <View style={{alignItems: 'center', /* backgroundColor:'black' */}}>
+                                        <Image 
+                                        source={require('../../assets/images/ad(x4).png')}
+                                        style={{width: wp('90%'), height: hp('15%'), marginBottom: hp('5%')}}
+                                        resizeMode={'contain'}
+                                        />
+                                    </View>
+                                </View>
+                                );
+                            } else {
+                                return(<Card {...item}/>);
+                            }
+                        }}
+                        refreshing={this.props.isFetching}
+                        onRefresh={this.props.refresh}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={this.props.onEndReached}
+                        keyExtractor={this.props.keyExtractor}
+                    />        
+                </View>
+
+            </View>
         );
     }
     

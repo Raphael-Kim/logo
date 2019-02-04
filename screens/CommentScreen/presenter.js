@@ -1,7 +1,6 @@
 import React from 'react';
-import {ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, KeyboardAware} from 'react-native';
-import {AppLoading, Font} from 'expo';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { ImageBackground, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Header } from 'react-navigation';
 
 class CommentScreen extends React.Component{
@@ -11,7 +10,10 @@ class CommentScreen extends React.Component{
 
         return(
             <View style={styles.container}>
-                <ImageBackground style={styles.contents1} source={require('../../assets/images/CommentScreen.png')} resizeMode={'stretch'}>
+                <ImageBackground 
+                    style={styles.contents1} 
+                    source={require('../../assets/images/CommentScreen.png')} 
+                    resizeMode={'stretch'}>
                     <View style={styles.forlogo}>
                         <View style={{flex: 1, marginLeft: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', marginTop: 5}}>
                         {/* ↑ <ImageBackground>가 row direction이라고 할지라도, 그 child인 <View>는 column direction이다! */}
@@ -35,7 +37,10 @@ class CommentScreen extends React.Component{
                     </View>
                 </ImageBackground>
 
-                <KeyboardAvoidingView style={styles.contents2} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
+                <KeyboardAvoidingView 
+                    style={styles.contents2} 
+                    keyboardVerticalOffset={Header.HEIGHT} 
+                    behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
                     <ScrollView style={styles.submitContents}>
                         <TextInput
                             style={styles.textInput1}
@@ -56,9 +61,7 @@ class CommentScreen extends React.Component{
                 </KeyboardAvoidingView>
             </View>
         );
-
     }
-
 }
 
 const styles = StyleSheet.create({

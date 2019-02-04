@@ -69,7 +69,6 @@ function reducer(state = initialState, action) {
 }
 
 function applySetToken(state, action) {
-    console.log(state);
     const { token } = action;
     return {
         ...state,

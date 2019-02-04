@@ -21,6 +21,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         addAskCard: (card) => {
             dispatch(cardActions.addAskCard(card))
+        },
+        setLogOut: () => {
+            dispatch(userActions.setLogOut());
         }
     };
 };

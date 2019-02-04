@@ -115,7 +115,7 @@ class Container extends React.Component {
                     }
                     catch(error) {
                         console.log('error_kakaoLogin(4단계)');
-                        this.props.setLogIn(); // → (for test)
+                        // this.props.setLogIn(); → (for test)
                     }
                 }
                 catch(error) {

@@ -5,8 +5,12 @@ import { AppLoading, Font } from 'expo';
 
 class Container extends React.Component {
     static propTypes = {
-        askCard: PropTypes.array,
-        getFeed: PropTypes.func
+        userInfo: PropTypes.object.isRequired,
+        userProfile: PropTypes.object.isRequired,
+        askCard: PropTypes.array.isRequired,
+        setAskCard: PropTypes.func.isRequired,
+        addAskCard: PropTypes.func.isRequired,
+        setLogOut: PropTypes.func.isRequired
     };
 
     state = {
@@ -17,13 +21,14 @@ class Container extends React.Component {
         currentAskCode: ''
     };
 
+    /* ↓ 활용해서 코드 수정할 것 고려 必 
     componentWillReceiveProps = (nextProps) => {
         if(nextProps.feed) {
             this.setState({
                 isFetching: false
             });
         }
-    };
+    }; */
 
     componentWillMount() {
         this.init();

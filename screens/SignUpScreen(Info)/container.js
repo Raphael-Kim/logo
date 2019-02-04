@@ -3,37 +3,37 @@ import PropTypes from "prop-types";
 import SignUpScreen_Info from "./presenter";
 
 class Container extends React.Component {
-    state={
-        email: '',
-        name: '',
-        /* ↑ 입력 받는 변수*/
-
-        yesImg: require('../../assets/images/beforeYes.png'),
-        /* ↑ yes 이미지 변동 버튼 변수 */
-
-        rightState: true,
-        /* ↑ 왼쪽 오른쪽 화살표 누르기 가능 불가능 버튼 */
-
-        data: [],
-        /* ↑ 페치 데이터 받는 변수*/
-
-        checkEmail: true,
-        /* ↑ 이메일 체크 변수 */
+    static propTypes = {
+        userInfo: PropTypes.object.isRequired,
     };
 
-    componentWillMount(){
+    state={
+        email: '', // → 입력 받는 변수
+        name: '', // → 입력 받는 변수
+        yesImg: require('../../assets/images/beforeYes.png'), // → yes 이미지 변동 버튼 변수
+        rightState: true, // → 왼쪽 오른쪽 화살표 누르기 가능 불가능 버튼
+        data: [], // → 페치 데이터 받는 변수
+        checkEmail: true, // → 이메일 체크 변수
+    };
+
+    async componentWillMount() {
         if(this.props.userInfo.kakao_account.is_email_verified === true) {
-            this.setState({ email: this.props.userInfo.kakao_account.email});
-        }
-        if(this.props.userInfo.properties.nickname){
-            this.setState({ name: this.props.userInfo.properties.nickname });
-        }
-        if(this.props.userInfo.kakao_account.is_email_verified === true && this.props.userInfo.properties.nickname){
-            this.setState({ rightState: false})
+            if(this.props.userInfo.properties.nickname) {
+                await this.setState({ 
+                    name: this.props.userInfo.properties.nickname,
+                    email: this.props.userInfo.kakao_account.email,
+                    rightState: false
+                });
+            } else {
+                await this.setState({
+                    email: this.props.userInfo.kakao_account.email
+                });                
+            }
         }
     }
 
     render() {
+
         return (
           <SignUpScreen_Info 
             {...this.props} 

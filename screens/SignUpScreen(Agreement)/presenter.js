@@ -4,24 +4,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 class SignUpScreen_Agreement extends React.Component{
-    state={
-        job: '',
-        signUpState: true,
-        check1: require('../../assets/images/beforeCheck.png'),
-        check2: require('../../assets/images/beforeCheck.png'),
-        check3: require('../../assets/images/beforeCheck.png'),
-        check4: require('../../assets/images/beforeCheck.png'),
-        fordb1: false,
-        fordb2: false,
-        fordb3: false
-    };
 
     render(){
 
         return(
             <View style={styles.container}>
                 {/*전체 3 칸 중 1번째 칸, 로고가 들어가는 이미지칸*/}
-                <ImageBackground style={styles.contents1} source={require('../../assets/images/signUp(x4).png')} resizeMode={'stretch'}>
+                <ImageBackground 
+                    style={styles.contents1} 
+                    source={require('../../assets/images/signUp(x4).png')} 
+                    resizeMode={'stretch'}>
                     <View style={styles.logoView1}>
                         <Text style={styles.logo1}>logo</Text>
                     </View>
@@ -37,8 +29,8 @@ class SignUpScreen_Agreement extends React.Component{
                     <View style = {styles.agreementLine}/>
 
                     <View style={styles.checkAll}>
-                        <TouchableOpacity onPress={this.fullCheck}>
-                            <Image source={this.state.check1}/>
+                        <TouchableOpacity onPress={this.props.fullCheck}>
+                            <Image source={this.props.check1}/>
                         </TouchableOpacity>
                         <Text style={styles.titleAll}>
                             이용약관, 개인정보 수집 및 이용, 푸시 알림 수신(선택)에 모두 동의합니다.
@@ -46,8 +38,8 @@ class SignUpScreen_Agreement extends React.Component{
                     </View>
 
                     <View style={styles.checkFirst}>
-                        <TouchableOpacity onPress={this.check1}>
-                                <Image source={this.state.check2}/>
+                        <TouchableOpacity onPress={this.props.checkAction1}>
+                                <Image source={this.props.check2}/>
                         </TouchableOpacity>
                         <Text style={styles.titleOfOthers}>
                             (필수) 이용약관 동의
@@ -72,8 +64,8 @@ class SignUpScreen_Agreement extends React.Component{
                     </View>    
 
                     <View style={styles.checkSecond}>
-                        <TouchableOpacity onPress={this.check2}>
-                                <Image source={this.state.check3}/>
+                        <TouchableOpacity onPress={this.props.checkAction2}>
+                                <Image source={this.props.check3}/>
                         </TouchableOpacity>
                         <Text style={styles.titleOfOthers}>
                             (필수) 개인정보 수집 및 이용에 대한 안내
@@ -95,8 +87,8 @@ class SignUpScreen_Agreement extends React.Component{
                     </View>
 
                     <View style={styles.checkThird}>
-                        <TouchableOpacity onPress={this.check3}>
-                                <Image source={this.state.check4}/>
+                        <TouchableOpacity onPress={this.props.checkAction3}>
+                                <Image source={this.props.check4}/>
                         </TouchableOpacity>
                         <Text style={styles.titleOfOthers}>
                             (선택) 푸시 알림 수신 동의
@@ -107,120 +99,26 @@ class SignUpScreen_Agreement extends React.Component{
 
                 {/*전체 3 칸 중 3번째 칸, 화살표 버튼이 들어가는 칸*/}
                 <View style={styles.contents3}>
-                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 40, /*backgroundColor: 'black'(for test)*/}}>
+                    <View style={styles.contents3_leftView}>
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignUp_Info');}} >
                             <Image source={require('../../assets/images/left.png')}/>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={styles.contents3_centerView}>
                         <TouchableOpacity 
                             onPress={() => {this.submit();}}
-                            disabled={this.state.signUpState}>
-                            {this.state.signUpState === true ? 
+                            disabled={this.props.signUpState}>
+                            {this.props.signUpState === true ? 
                             <Image source={require('../../assets/images/SignUpDisable.png')}/>:
                             <Image source={require('../../assets/images/SignUpAble.png')}/>}
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{flex: 1, marginRight: 40, /*backgroundColor: 'black'(for test)*/}}/>
+                    <View style={styles.contents3_rightView}/>
                 </View>
             </View>
         );
-    }
-
-    fullCheck = () => {
-        if( this.state.check1 === require('../../assets/images/beforeCheck.png')){
-            this.setState({
-                check1: require('../../assets/images/afterCheck.png'),
-                check2: require('../../assets/images/afterCheck.png'),
-                check3: require('../../assets/images/afterCheck.png'),
-                check4: require('../../assets/images/afterCheck.png'),
-                fordb1: true,
-                fordb2: true,
-                fordb3: true,
-                signUpState: false
-            });
-        }else{
-            this.setState({
-                check1: require('../../assets/images/beforeCheck.png'),
-                check2: require('../../assets/images/beforeCheck.png'),
-                check3: require('../../assets/images/beforeCheck.png'),
-                check4: require('../../assets/images/beforeCheck.png'),
-                fordb1: false,
-                fordb2: false,
-                fordb3: false,
-                signUpState: true
-            });
-        }
-    }
-
-    check1 = () => {
-        if(this.state.check2 === require('../../assets/images/beforeCheck.png')){
-            this.setState({check2: require('../../assets/images/afterCheck.png'), fordb1: true});
-            this.state.check3 === require('../../assets/images/afterCheck.png') ? this.setState({signUpState:false}) : this.setState({signUpState:true});
-        }else{
-            this.setState({check2: require('../../assets/images/beforeCheck.png'), signUpState: true, fordb1: false});
-        }
-    }
-    check2 = () => {
-        if(this.state.check3 === require('../../assets/images/beforeCheck.png')){
-            this.setState({check3: require('../../assets/images/afterCheck.png'), fordb2: true});
-            this.state.check2 === require('../../assets/images/afterCheck.png') ? this.setState({signUpState:false}) : this.setState({signUpState:true});
-        }else{
-            this.setState({check3: require('../../assets/images/beforeCheck.png'), signUpState: true, fordb2: false});
-        }
-    }
-    check3 = () => {
-        if(this.state.check4 === require('../../assets/images/beforeCheck.png')){
-            this.setState({check4: require('../../assets/images/afterCheck.png'), fordb3: true});
-        }else{
-            this.setState({check4: require('../../assets/images/beforeCheck.png'), fordb3: false});            
-        }
-    }
-
-    submit = async () => {
-        try{
-            let response = await fetch('http://18.222.158.114:3210/submit', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json;charset=UTF-8',
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                body: JSON.stringify({
-                    email: this.props.navigation.state.params.email, 
-                    name: this.props.navigation.state.params.name, 
-                    check1: this.state.fordb1,
-                    check2: this.state.fordb2,
-                    check3: this.state.fordb3,
-                    kakaoCode: this.props.navigation.state.params.kakaoCode,
-                    kakaoImg: this.props.userInfo.properties.profile_image
-                })
-            });
-            //console.log(response);
-            try{
-                let response = await fetch('http://18.222.158.114:3210/fetchUserCode', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json;charset=UTF-8',
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify({
-                        kakaoCode: this.props.navigation.state.params.kakaoCode                   
-                    })
-                })
-                var json = await response.json();
-                console.log(json[0]);
-                this.props.setUserProfile(json[0]);
-                this.props.logIn();
-            }
-            catch(error) {
-                console.log('error_userCode')
-            }
-        }
-        catch(error){
-            console.log('error_submit');
-        }
     }
 }
 
@@ -367,6 +265,23 @@ const styles = StyleSheet.create({
         flex: 2.8,
         flexDirection: 'row',
         // backgroundColor: 'yellow'(for test)
+    },
+    contents3_leftView: {
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'flex-start', 
+        marginLeft: 40, 
+        // backgroundColor: 'black'(for test)
+    },
+    contents3_centerView: {
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    },
+    contents3_rightView: {
+        flex: 1, 
+        marginRight: 40, 
+        // backgroundColor: 'black'(for test)
     },
     textInput: {
         fontFamily: 'NanumSquareR', 
