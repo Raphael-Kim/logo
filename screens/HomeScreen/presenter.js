@@ -10,7 +10,7 @@ import { Header } from 'react-navigation';
 class HomeScreen extends React.Component {
 
     render(){
-        console.log('presenter render');
+        console.log('presenter render(HomeScreen)');
         const { profile_image } = this.props.userInfo.properties
 
         return(

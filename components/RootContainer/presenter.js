@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, StatusBar, StyleSheet } from 'react-native';
-import { AppLoading, Font } from 'expo';
+import { AppLoading, Asset, Font } from 'expo';
 import LoggedOutNavigation from '../../navigation/LoggedOutNavigation';
 import LoggedInNavigation from '../../navigation/LoggedInNavigation';
 
@@ -29,59 +29,81 @@ class RootContainer extends React.Component {
 
     render() {
         const { isLoggedIn } = this.props;
+        console.log('presenter render(RootContainer)');
+        console.log('\'isReady\' is', this.state.isReady);
 
         if(this.state.isReady === false) {
             return(
                 <AppLoading 
-                    autoHideSplash={false} // → 기본값(default)
+                    // autoHideSplash={false} → 제거한 이후 <AppLoading> 화면에 갇히는 문제 제거(2019년 2월 4일 오후 2시 12분)
                     startAsync={() => {
-                        return Promise.all([this.checkTokenForKakao(), this.loadAssetsAsync()]);
+                        return Promise.all([this.checkTokenForKakao(), this.loadFontsAsync(), this.loadImagesAsync()]);
                     }} // → 두 함수가 모두 Promise.resolve()되면 onFinish()가 실행됨
-                    onFinish={() => this.setState({ isReady: true })}
+                    onFinish={() => {
+                        console.log('\'onFinish\' function is NOW working on');
+                        this.setState({ isReady: true });
+                    }}
                     onError={() => console.log('error_<AppLoading>')}
                 />
             );
-        } else {
-
-            return(
-                <View style={styles.container}>
-                    <StatusBar hidden={false} />
-                    {isLoggedIn ? (
-                        // Home 화면으로 이동
-                        <LoggedInNavigation/>
-                    ) : (
-                        // Login 화면으로 이동
-                        <LoggedOutNavigation/>
-                    )}
-                </View>
-            );
         }
+
+        return( 
+            <View style={styles.container}>
+                <StatusBar hidden={false} />
+                {isLoggedIn ? (
+                    // Home 화면으로 이동
+                    <LoggedInNavigation/>
+                ) : (
+                    // Login 화면으로 이동
+                    <LoggedOutNavigation/>
+                )}
+            </View>
+        );
     }
 
     /* ↓ for font */
-    loadAssetsAsync = async () => {
+    loadFontsAsync = async () => {
+        console.log('loadFontsAsync start');
         await Font.loadAsync({
             NanumSquareR: require('../../assets/fonts/NanumSquareR.ttf'),
             godoRoundedR: require('../../assets/fonts/godoRoundedR.ttf')
         });
+        console.log('loadFontsAsync end');
+    };
+
+    /* ↓ for image */
+    loadImagesAsync = async () => {
+        console.log('loadImagesAsync start');
+        await Asset.loadAsync([
+            require('../../assets/images/background(x4).png'),
+            require('../../assets/images/home(x4).png'),
+            require('../../assets/images/questionScreen(x4).png'),
+            require('../../assets/images/signUp(x4).png')
+        ]);
+        console.log('loadImagesAsync end');
     };
 
     /* ↓ to check token for Kakao Session */
     checkTokenForKakao = async () => {
+        if(!this.props.token) { // → 최초 로딩시 token이 無
+            return null
+        }
+
         /* ↓ [1단계] access_token_info
         ※ V_2(async&await 만으로 fetch를 구현) */ 
         try{
-            console.log(this.props.token, 'from RootContainer/presenter.js');
+            // console.log(this.props.token, 'from RootContainer/presenter.js'); (for test)
             let response = await fetch('https://kapi.kakao.com/v1/user/access_token_info', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.props.token.access_token}`,
                 }
             });
-            var json = await response.json();
+            let json = await response.json();
             // json = {code: -401}; (for test)
             // json = {code: 10}; (for test)
-            // console.log(json, 'checkTokenForKakao(1단계)');
+            console.log(json, 'checkTokenForKakao(1단계)');
 
             if(json.code === -1) {
                 /* [2.1단계] 카카오톡 서비스 장애 처리
@@ -97,7 +119,7 @@ class RootContainer extends React.Component {
                     `&client_id=${KAKAO_APP_KEY}` +
                     `&refresh_token=${this.props.token.refresh_token}`;
                     // console.log(body); (for test)
-                    let response = await fetch('https://kauth.kakao.com/oauth/token', {
+                    response = await fetch('https://kauth.kakao.com/oauth/token', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json;charset=UTF-8',

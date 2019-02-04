@@ -3,6 +3,7 @@ import { ImageBackground, StyleSheet, View, TouchableOpacity, Image, StatusBar }
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 class LogInScreen extends React.Component {
+    
     render() {
         // console.log(this.props);
         // console.log(this.state);

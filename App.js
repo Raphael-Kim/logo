@@ -7,10 +7,10 @@ import RootContainer from './components/RootContainer';
 
 const { persistor, store } = configureStore();
 
-export default class App extends React.Component {
+class App extends React.Component {
     
     render() {
-        console.log(store.getState(), 'from App.js');
+        // console.log(store.getState(), 'default STORE from App.js');
         
         return(
             <Provider store={store}>
@@ -23,3 +23,5 @@ export default class App extends React.Component {
         );
     }
 }
+
+export default App; 

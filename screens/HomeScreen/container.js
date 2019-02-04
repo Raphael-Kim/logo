@@ -30,7 +30,7 @@ class Container extends React.Component {
     }
 
     render() {
-        console.log('container render');
+        console.log('container render(HomeScreen)');
         
         return (
             <HomeScreen 
