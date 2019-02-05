@@ -123,7 +123,7 @@ class Container extends React.Component {
         }
     }
 
-    submit = async () => {
+    _submit = async () => {
         try{
             let response = await fetch('http://18.222.158.114:3210/submit', {
                 method: 'POST',

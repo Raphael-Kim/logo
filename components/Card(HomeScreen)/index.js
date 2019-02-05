@@ -46,7 +46,7 @@ class Card extends React.PureComponent {
                             this.props.count === null ?
                             <Text style={styles.profileText}></Text> :
                             <Text style={styles.profileText}>
-                                <Text style={styles.profileName}>{this.props.answerName} </Text> {/* → 이름 뒤 공란(space) 必*/}
+                                <Text style={styles.profileName}>{this.props.answerName} </Text>{/* → 이름 뒤 공란(space) 必*/}
                                 <Text style={styles.profileJob}></Text>                   
                             </Text> }    
 

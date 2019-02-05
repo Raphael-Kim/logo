@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import HomeScreen from './presenter';
-import { AppLoading, Font } from 'expo';
 
 class Container extends React.Component {
     static propTypes = {
@@ -56,22 +55,28 @@ class Container extends React.Component {
             let response = await fetch('http://18.222.158.114:3210/FetchNewAskCard', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Accept': 'application/json;charset=UTF-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                 }
             });
             var json = await response.json();
-            // console.log(json);
-            await this.setState({currentAskCode: json.slice(-1)[0].askCode}); // → render_1
+
+            // ↓ 답변이 존재하는 경우
+            if(json.length !== 0) {
+                await this.setState({currentAskCode: json.slice(-1)[0].askCode}); // → render_1
+                // console.log(this.state.currentAskCode);
+            } 
+
             this.props.setAskCard(json); // → render_2
+            if(this.state.isFetching === true) {
+                this.setState({isFetching: false }); // → render_3
+            }
+        }
+        catch(error){
+            console.log('error_init(HomeScreen)');
             if(this.state.isFetching === true) {
                 this.setState({isFetching: false });
             }
-            // await this.setState({currentAskCode: json[0].askCode}); 
-            // console.log(this.state.currentAskCode);
-        }
-        catch(error){
-            console.log('error_init');
         }
     }
 
@@ -80,8 +85,8 @@ class Container extends React.Component {
             let response = await fetch('http://18.222.158.114:3210/FetchOldAskCard', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Accept': 'application/json;charset=UTF-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                 },
                 body: JSON.stringify({
                     currentAskCode: this.state.currentAskCode
@@ -94,7 +99,7 @@ class Container extends React.Component {
             // console.log(this.state.currentAskCode);
         }
         catch(error){
-            console.log('onEndReached_error');
+            console.log('error_onEndReached(HomeScreen)');
         }        
     }
 

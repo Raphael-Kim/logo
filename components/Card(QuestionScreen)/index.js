@@ -10,8 +10,8 @@ class Card extends React.PureComponent {
         const { kakaoImg } = this.props;
 
         return(
-            <TouchableOpacity
-                onPress={() => {this.props.navigation.navigate('Comment');}}>
+            <TouchableOpacity // → onPress에 채워넣을 것!
+                onPress={() => {}}>
                 <View style={styles.container}>
                     <View style={styles.view1}>
                         <Text style={styles.askTitle}>{this.props.askTitle}</Text>
@@ -47,8 +47,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 10,
         width: wp('80%'),
-        height: hp('55%'),
-        marginTop: hp('2.5%'), 
+        height: hp('55%'), 
         // ↑ 카드(card)의 아래 테두리선(borderBottom)이 보이도록 marginTop을 설정
         ...Platform.select({
             ios: {

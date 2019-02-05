@@ -33,32 +33,34 @@ class QuestionScreen extends React.Component{
                         <Text style={styles.logo}>logo</Text>
                     </View>
                     <View style={{flex: 1, marginRight: 20, /*backgroundColor: 'black',(for test) */justifyContent: 'center', alignItems: 'flex-end', marginTop: 5}}>
-                        <TouchableOpacity 
-                            onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);} }>
-                            <AnimatedCircularProgress
-                                ref={(ref) => this.circularProgress = ref}
-                                size={wp('11%')}
-                                width={wp('0.8%')}
-                                fill={70}
-                                lineCap={'round'}
-                                // tintColor: stroke 색깔
-                                onAnimationComplete={() => console.log('onAnimationComplete')}
-                                backgroundColor="red">
-                                {
-                                    () => (<Image 
-                                                source={{uri: `${profile_image}`}}
-                                                style={{width: '100%' , height: '100%'}} 
-                                            />)
-                                }
-                            </AnimatedCircularProgress>
-                        </TouchableOpacity>
+                        <AnimatedCircularProgress
+                            ref={(ref) => this.circularProgress = ref}
+                            size={wp('11%')}
+                            width={wp('0.8%')}
+                            fill={70}
+                            lineCap={'round'}
+                            // tintColor: stroke 색깔
+                            onAnimationComplete={() => console.log('onAnimationComplete')}
+                            backgroundColor="red">
+                            {
+                                () => (
+                                    <TouchableOpacity 
+                                        onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);}}
+                                        style={{width: '100%' , height: '100%'}}>{/* → style을 지정해야 <image>가 render()! */}
+                                    {/* ↑ 컴포넌트 사이에 ' '(space) 넣으면 에러 발생: <Text> 안에 작성하라고 */}
+                                        <Image 
+                                            source={{uri: `${profile_image}`}}
+                                            style={{width: '100%' , height: '100%'}}/>
+                                    </TouchableOpacity>
+                                    )
+                            }
+                        </AnimatedCircularProgress>
                     </View>
                 </View>
 
                 <View style={styles.contents2}>
-                    <Image
-                        source={{uri: `${askerKakaoImg}`}}
-                        style={styles.profileImage}/>
+                    {!askerKakaoImg ? null :
+                    <Image source={{uri: `${askerKakaoImg}`}} style={styles.profileImage}/>}
                     <View style={styles.profileText}>
                         <ScrollView>
                             <Text style={styles.QuestionerName}>{name}님의 질문</Text>
@@ -77,6 +79,7 @@ class QuestionScreen extends React.Component{
                         onEndReached={this.props.onEndReached}
                         keyExtractor={this.props.keyExtractor}
                         horizontal={true}
+                        contentContainerStyle={{alignItems: 'center'}}
                     />        
                 </View>
 
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     contents3:{
         height: hp('65%'),
         width: wp('100%'),
+        // backgroundColor: 'blue' (for test)
     },
     contents4:{
         height: hp('10%'),

@@ -107,7 +107,7 @@ class SignUpScreen_Agreement extends React.Component{
 
                     <View style={styles.contents3_centerView}>
                         <TouchableOpacity 
-                            onPress={() => {this.submit();}}
+                            onPress={() => {this.props.submit();}}
                             disabled={this.props.signUpState}>
                             {this.props.signUpState === true ? 
                             <Image source={require('../../assets/images/SignUpDisable.png')}/>:

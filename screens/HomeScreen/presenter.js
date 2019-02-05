@@ -45,12 +45,11 @@ class HomeScreen extends React.Component {
                                 () => (
                                     <TouchableOpacity 
                                         onPress={() => {this.circularProgress.reAnimate(0, 70, 2000, Easing.quad);}}
-                                        style={{width: '100%' , height: '100%'}} // → style을 지정해야 <image>가 render()!
-                                    > 
+                                        style={{width: '100%' , height: '100%'}}>{/* → style을 지정해야 <image>가 render()!*/}
+                                    {/* ↑ 컴포넌트 사이에 ' '(space) 넣으면 에러 발생: <Text> 안에 작성하라고 */}
                                         <Image 
                                             source={{uri: `${profile_image}`}}
-                                            style={{width: '100%' , height: '100%'}} 
-                                        />
+                                            style={{width: '100%' , height: '100%'}}/>
                                     </TouchableOpacity>
                                     )
                             }

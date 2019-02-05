@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
     const { user: { isLoggedIn } } = state;
     const { user: { token } } = state;
     return {
-        isLoggedIn, // isLoggedIn을 subscribe()한 후 계속 listen해야함
+        isLoggedIn, // → isLoggedIn을 subscribe()한 후 계속 listen해야함
         token
     };
 };
